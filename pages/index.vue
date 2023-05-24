@@ -1,23 +1,46 @@
 <script lang="ts" setup>
-  import MainNav from "~/components/navigation/MainNav.vue";
-  import TheFooter from "~/components/navigation/TheFooter.vue";
+import MainNav from "~/components/navigation/MainNav.vue";
+import TheFooter from "~/components/navigation/TheFooter.vue";
 
-
+const eventStartDate = ref("24/06/2023");
 </script>
 
 <template>
-  <MainNav/>
-  <header class="bg-header-image object-cover h-[500px] px-8 md:px-12 py-12 bg-gray-500 bg-blend-multiply">
+  <MainNav />
+  <header
+    class="bg-header-image object-cover h-[250px] px-8 md:px-12 py-12 bg-gray-500 bg-blend-multiply"
+  >
     <h1 class="mx-auto text-white font-extralight uppercase">
-      <span class="text-lg block">Swim Night</span><span class="text-4xl font-black text-primary">Registration</span>
+      <span class="text-lg block">Swim Night Entry</span
+      ><span class="text-4xl font-black text-primary">Converter</span>
     </h1>
+    <div class="my-8" v-if="false">
+      <BaseNotice>
+        <template #title>Please note:</template>
+        <template #text
+          >Open only for Tumbler 2, Tumbler 3, Skimmer, Cruiser, Laing and
+          Drysdale squad only. <br />
+          Registered Competitive swimmers to register via
+          <a
+            href="https://fastlane.swimming.org.nz/login"
+            target="_blank"
+            class="text-white underline"
+            >FastLane</a
+          >.
+        </template>
+      </BaseNotice>
+    </div>
   </header>
-  <div class="h-96"></div>
-  <TheFooter/>
+  <section
+    class="min-h-96 px-8 md:px-12 py-12 mx-auto flex justify-center max-w-xl"
+  >
+    <ConvertForm :eventDate="eventStartDate" />
+  </section>
+  <TheFooter />
 </template>
 
 <style>
 body {
-  @apply bg-neutral-100 text-neutral-900
+  @apply bg-neutral-100 text-neutral-900;
 }
 </style>
