@@ -1,48 +1,66 @@
 <script setup>
 // import {submit} from "@formkit/icons";
-import { FormKitIcon, FormKitSchema, createInput } from "@formkit/vue";
+// import { FormKitIcon, FormKitSchema, createInput } from "@formkit/vue";
 import { reset } from "@formkit/core";
-import { raceSchema } from "assets/races/events.js";
 
-function wait(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+import { meetConfig } from "~/schemas/eventInfo";
+import { csvData, createEvent } from "~/services/createEvent";
+import { getDataRows } from "~/utils/utilFunctions";
 
-defineProps({
-  eventDate: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  eventTitle: {
-    type: String,
-    required: false,
-    default: "Convert Stratum",
-  },
-  eventTime: {
-    type: String,
-    required: false,
-    default: "5pm",
-  },
-});
-const eventOptions = raceSchema();
 const submitted = ref(false);
 
-async function handleSubmit(data) {
-  // this.$formkit.;
-  await wait(3000);
-  console.log(data);
+const meetName = ref("Coach Sam's Farewell Club Night");
+const meetStartDate = ref("2023-06-24");
+const meetEndDate = meetStartDate;
+const meetOrganiserCode = ref("LVW");
+
+const meetOrganiserDetails = ref({});
+
+const meetData = ref("");
+const meetHeader = ref("");
+const mandatoryColumns = ref([4, 5, 6, 7, 8, 9, 11]);
+const mandatoryColumnsObj = ref([
+  { key: "teamCode", index: 4 },
+  { key: "firstName", index: 5 },
+  { key: "middleName", index: 6 },
+  { key: "lastName", index: 7 },
+  { key: "dob", index: 8 },
+  { key: "gender", index: 9 },
+  { key: "events", index: 11 },
+  { key: "eventCount", index: 12 },
+]);
+const sd3Str = ref("");
+
+const handleSubmit = (data) => {
+  meetData.value = data["convert-area"];
+
+  const swimmerData = getDataRows(csvData);
+
+  // replace csv data with value of input from text area
+  sd3Str.value = createEvent(
+    swimmerData,
+    mandatoryColumnsObj.value,
+    meetStartDate.value,
+    meetEndDate.value,
+    meetName.value,
+    meetOrganiserDetails.value
+  );
+
   submitted.value = true;
+
+  // in production we'll be returning sd3str
   return true;
-}
+};
 
 function clearForm() {
-  reset("regForm");
+  reset("convertForm");
 }
 
-const value = ref([]);
+watch(meetOrganiserCode, () => {
+  meetOrganiserDetails.value = meetConfig.getOrganiserByCode(
+    meetOrganiserCode.value
+  );
+});
 </script>
 
 <template>
@@ -53,61 +71,57 @@ const value = ref([]);
       :config="{ validationVisibility: 'dirty' }"
       @submit="handleSubmit"
       :actions="false"
-      id="regForm"
-      form-class="grid grid-cols-8 gap-2"
+      id="convertForm"
+      form-class="grid grid-cols-12 gap-4"
     >
       <template #default="{ state }">
-        <h1 class="col-span-full font-bold mb-8">
-          {{ eventTitle }} - {{ eventDate }} from {{ eventTime }}
-        </h1>
-
-        <FormKit
-          type="text"
-          label="Parent's Name"
-          placeholder="Enter your full name"
-          validation="required"
-          name="parent-name"
-          outer-class="col-span-4"
-        />
-        <FormKit
-          type="text"
-          label="Contact Email"
-          placeholder="Email address"
-          validation="required|email"
-          name="email"
-          outer-class="col-span-4 "
-        />
-        <FormKit
-          type="text"
-          label="Swimmer's Name"
-          name="swimmer"
-          placeholder="Enter your child's full name"
-          validation="required|length:3"
-          outer-class="col-span-full"
-          wrapper-class="w-full"
-        />
-
-        <FormKit
-          type="select"
-          label="Gender"
-          name="gender"
-          placeholder="Gender"
-          :options="{ male: 'M', female: 'F' }"
-          validation="required|length:1"
-          outer-class="col-span-3"
-          :selectIcon-class="{ 'self-center': true, 'h-full': false }"
-        />
+        <h1 class="col-start-2 col-span-6 font-semibold mb-2">Instructions</h1>
+        <p class="col-start-2 col-span-6 text-sm mb-8">
+          Open the downloaded scv file in a plain text editor. Copy all contents
+          of the file and paste them to the input below.
+        </p>
 
         <FormKit
           type="date"
-          label="Date of Birth"
-          name="dob"
-          placeholder="DOB"
-          validation="required"
-          outer-class="col-span-5"
+          label="Event Date"
+          v-model="meetStartDate"
+          placeholder="Event date"
+          validation="required|date"
+          name="meet-date"
+          outer-class=" col-start-2 col-span-4 "
         />
-
-        <div class="col-span-full flex gap-4">
+        <FormKit
+          type="text"
+          label="Meet Name"
+          name="meet-name"
+          v-model="meetName"
+          placeholder="Enter the name of the meet"
+          validation="required|length:3"
+          outer-class="col-start-7 col-span-4 "
+        />
+        <FormKit
+          type="select"
+          label="Meet Organiser"
+          name="meet-organiser"
+          v-model="meetOrganiserCode"
+          :options="meetConfig.getAllClubNamesFormSelect()"
+          placeholder="Select Meet Organiser"
+          validation="required"
+          wrapper-class="$reset max-w-full w-full"
+          selectIcon-class="$reset formkit-select-icon flex p-[3px] shrink-0 w-5 mr-2 -ml-[1.5em] pointer-events-none formkit-icon"
+          outer-class="col-start-2 col-span-9 "
+        />
+        <FormKit
+          type="textarea"
+          label="Input"
+          placeholder="Paste your data here"
+          validation="string"
+          name="convert-area"
+          wrapper-class="$reset max-w-full w-full"
+          inner-class="$reset formkit-disabled:bg-gray-200 formkit-disabled:cursor-not-allowed formkit-disabled:pointer-events-none flex rounded mb-1 ring-1 ring-gray-400 focus-within:ring-blue-500 [&>label:first-child]:focus-within:text-blue-500 max-w-full w-full"
+          outer-class="col-start-2 col-span-9"
+        />
+        <div class="col-start-2 col-span-8 flex gap-4 mb-4">
           <FormKit
             type="button"
             :disabled="state.loading"
@@ -120,31 +134,27 @@ const value = ref([]);
             :disabled="state.loading"
             @submit="handleSubmit"
             input-class="$reset form-btn btn-primary"
-            prefix-icon-class="animate-spin"
           >
-            <template #prefixIcon v-if="state.loading">
-              <FormKitIcon icon="spinner" class="animate-spin h-5 mr-2" />
-            </template>
             <template #default>
-              {{ !state.loading ? "Register" : "Loading" }}
+              {{ !state.loading ? "Convert" : "Working" }}
             </template>
           </FormKit>
         </div>
 
         <transition name="fade">
-          <BaseNotice
-            v-if="submitted"
+          <!--            v-if="submitted"-->
+          <CodeOutput
             border="thin"
             spacing="thin"
             :status="submitted"
+            :output="sd3Str"
+            class="col-start-1 col-span-full"
           >
-            <template #text>
-              Your registration has been submitted successfully.
-            </template>
-          </BaseNotice>
+            <template #title>SD3 File Content</template>
+          </CodeOutput>
         </transition>
-        <div class="col-span-full">
-          {{ state }}
+        <div class="col-start-1 col-span-full">
+          <!--          {{ state }}-->
         </div>
       </template>
     </FormKit>

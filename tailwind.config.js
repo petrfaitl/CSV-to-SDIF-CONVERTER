@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+/** @utils {import('tailwindcss').Config} */
 import FormKitVariants from "@formkit/themes/tailwindcss";
 module.exports = {
   content: [

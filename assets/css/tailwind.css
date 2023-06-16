@@ -3,12 +3,13 @@
 @tailwind utilities;
 
 
+
 @layer base{
     a{
         @apply text-primary hover:underline;
     }
     button{
-        @apply transition hover:shadow w-[150px];
+        @apply transition hover:shadow w-[150px] max-w-[250px];
     }
 }
 @layer components{
@@ -24,5 +25,6 @@
     }
 
 
-
 }
+
+
