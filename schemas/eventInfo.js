@@ -76,6 +76,11 @@ export const teamCodes = {
     lscCode: "BP",
     teamName: "LVW Aquatics Swim Club",
   },
+  evobp: {
+    teamCode: "EVO",
+    lscCode: "BP",
+    teamName: "Evolution Swimming Club",
+  },
   undefined: {
     teamCode: "LVW",
     lscCode: "BP",

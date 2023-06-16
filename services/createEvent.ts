@@ -2,29 +2,28 @@ import {
   emitA0Record,
   emitB1Record,
   emitC1Record,
-  emitD0Record,
-  emitD1Record,
   emitZ0Record,
 } from "~/composables/emitRecords";
-import { teamCodes } from "~/schemas/eventInfo";
+import { sdifConst, teamCodes } from "~/schemas/eventInfo";
 import {
   separateAndCleanRecords,
   filterAndNameColumns,
+  getTeamName,
 } from "~/utils/utilFunctions";
 import { createSwimmerRecords } from "~/services/createSwimmer";
 
 // Test record
-const swimmerEventRecord = {
-  fullName: "Faitl, Katherine",
-  MMNumber: "LVWKFZ100210",
-  dob: "2010-02-10",
-  gender: "F",
-  eventGender: "X",
-  eventDistance: "25",
-  eventStrokeCode: "1",
-  eventAge: "",
-  teamCode: teamCodes.lvwbp.lscCode + teamCodes.lvwbp.teamCode,
-};
+// const swimmerEventRecord = {
+//   fullName: "Faitl, Katherine",
+//   MMNumber: "LVWKFZ100210",
+//   dob: "2010-02-10",
+//   gender: "F",
+//   eventGender: "X",
+//   eventDistance: "25",
+//   eventStrokeCode: "1",
+//   eventAge: "",
+//   teamCode: teamCodes.lvwbp.lscCode + teamCodes.lvwbp.teamCode,
+// };
 
 export const csvData =
   '"Submission Time","Parent / Legal Guardian Name","Email Address",Phone,Team,"Name - First Name","Name - Middle Name","Name - Last Name","Date of Birth",Gender,"Meet Date","Enter events","Number of events","Available for time-keeping?","Helper\'s Name","Payment type","Entry Fee","Card Name","Address - Street Address","Address - Apartment, suite, etc","Address - City","Address - State/Province","Address - Postcode","Address - Country","Credit / Debit Card - Mode","Credit / Debit Card - Product / Plan Name","Credit / Debit Card - Payment type","Credit / Debit Card - Amount","Credit / Debit Card - Currency","Credit / Debit Card - Quantity","Credit / Debit Card - Transaction ID","Credit / Debit Card - Status","Credit / Debit Card - Manage",T&Cs\n' +
@@ -40,8 +39,8 @@ export const csvData =
   '"Jun 6, 2023 @ 5:07 PM","Anna Opie",theopies@hotmail.com,"\'+64 274 279 921\'",LVWBP,Heidi,Esther,Opie,04/09/2014,Female,24/06/2023,"25m Back, 25m Free, 25m Breast",3,,,"Credit card","NZ$ 10.60","Anna L M Opie","24 Springwater Lane",,Tauranga,,3112,"New Zealand",live,"LVWA club night entry","One Time",10.60,NZD,1,pi_3NFs74FC4Jqb2d060TxjgOA2,COMPLETED,,checked\n' +
   '"Jun 6, 2023 @ 11:20 AM","Jessica Lawson",jessica@cintesi.co.nz,"\'+64 27 283 7384\'",LVWBP,Charlotte,,Lawson,02/12/2015,Female,24/06/2023,"25m Back, 25m Breast, 25m Fly, 50m Free",4,,,"Credit card","NZ$ 10.60","Jessica Lawson","1 Grace Road",Tauranga,"Tauranga South",,3110,"New Zealand",live,"LVWA club night entry","One Time",10.60,NZD,1,pi_3NFmhJFC4Jqb2d061NeyL2ta,COMPLETED,,checked\n' +
   '"Jun 6, 2023 @ 11:18 AM","Jessica Lawson",jessica@cintesi.co.nz,"\'+64 27 283 7384\'",LVWBP,Frank,,Lawson,13/12/2013,Male,24/06/2023,"25m Back, 25m Breast, 25m Fly, 50m Free",4,,,"Credit card","NZ$ 10.60","Jessica Lawson","1 Grace Road",Tauranga,"Tauranga South",,3110,"New Zealand",live,"LVWA club night entry","One Time",10.60,NZD,1,pi_3NFmfSFC4Jqb2d0615rEzCPl,COMPLETED,,checked\n' +
-  '"Jun 5, 2023 @ 8:23 PM","Mulliga Khotsetthee",mulliga.1981@gmail.com,0276968179,LVWBP,Ally,,Burfoot,11/07/2012,Female,24/06/2023,"25m Free, 25m Breast, 50m Breast",3,,,"Bank transfer","NZ$ 10.00",,,,checked\n' +
-  '"Jun 5, 2023 @ 8:04 PM","Elles Pearse-Danker",ellespd@gmail.com,02108870988,LVWBP,Jasper,,Pearse-Danker,02/05/2013,Male,24/06/2023,"25m Back, 25m Free, 50m Free, 50m Back",4,Yes,"Elles Pearse-Danker - or can be IOT","Bank transfer","NZ$ 10.00",,,,checked';
+  '"Jun 5, 2023 @ 8:23 PM","Mulliga Khotsetthee",mulliga.1981@gmail.com,0276968179,,Ally,,Burfoot,11/07/2012,Female,24/06/2023,"25m Free, 25m Breast, 50m Breast",3,,,"Bank transfer","NZ$ 10.00",,,,checked\n' +
+  '"Jun 5, 2023 @ 8:04 PM","Elles Pearse-Danker",ellespd@gmail.com,02108870988,EVOBP,Jasper,,Pearse-Danker,02/05/2013,Male,24/06/2023,"25m Back, 25m Free, 50m Free, 50m Back",4,Yes,"Elles Pearse-Danker - or can be IOT","Bank transfer","NZ$ 10.00",,,,checked';
 
 /**
  * Takes raw csv data and processes entries, returns sd3 formatted text string
@@ -54,16 +53,28 @@ export const createEvent = (
   meetEndDate: string,
   meetName: string,
   meetOrganiserDetails: object
-): string => {
+) => {
   /**
    * Object to capture all output records
    */
-  const output = {
+  const output: {
+    z0Record: string;
+    dRecords: any;
+    c1Records: any;
+    a0Record: string;
+    b1Record: string;
+  } = {
     a0Record: "",
     b1Record: "",
+    dRecords: {},
     c1Records: {},
     z0Record: "",
   };
+
+  let c1Teams = [];
+
+  // Output String
+  let sdifStr: string = "";
 
   //destructure incoming data
   const { meetAddress, meetCity, meetPostcode, meetState }: any =
@@ -78,9 +89,11 @@ export const createEvent = (
     headerColumns
   );
 
-  const swimmer = createSwimmerRecords(swimmerEventRecords[0], meetStartDate);
+  // Replace with loop
 
-  // Record builder
+  /**
+   * Push a0, b1 and z record to an object variable
+   */
   output.a0Record = emitA0Record();
   output.b1Record = emitB1Record(
     meetName,
@@ -93,69 +106,60 @@ export const createEvent = (
   );
   output.z0Record = emitZ0Record();
 
-  // console.log(output);
+  /**
+   * Loops over all swimmer records
+   */
 
-  return swimmer.swimmerD0Records;
+  swimmerEventRecords.forEach((swimmerRecord: any) => {
+    const { individualEventRecords, teamCode, teamLSC } = createSwimmerRecords(
+      swimmerRecord,
+      meetStartDate
+    );
+    const teamName: string = getTeamName(teamCode + teamLSC);
+
+    // Test if teamCode in dRecords
+    if (!Object.hasOwn(output.dRecords, teamCode)) {
+      // Add teamCode empty array to dRecords
+      Object.assign(output.dRecords, { [teamCode]: [] });
+
+      // Adds teamCode empty string to c1Records
+      Object.assign(output.c1Records, { [teamCode]: "" });
+      output.c1Records[teamCode] = emitC1Record(teamCode, teamName);
+
+      // c1Teams.push(teamCode);
+    }
+    // Adds swimmer d0 records and d1 record to array
+    output.dRecords[teamCode].push(individualEventRecords);
+  });
+
+  const buildSdifFile = () => {
+    // Add a0 and b1 record to the initial string
+    sdifStr = sdifStr.concat(output.a0Record, output.b1Record);
+
+    c1Teams = Object.keys(output.c1Records);
+
+    c1Teams.forEach((team) => {
+      sdifStr = sdifStr.concat(output.c1Records[team]);
+      const teamDRecords = output.dRecords[team].reduce(
+        (accumulator: string, teamDRecords: string[]) => {
+          const swimmerDRecord = teamDRecords.reduce(
+            (accum: string, swimmerDRecords) => {
+              return accum.concat(swimmerDRecords);
+            },
+            ""
+          );
+
+          return accumulator.concat(swimmerDRecord);
+        },
+        ""
+      );
+
+      sdifStr = sdifStr.concat(teamDRecords);
+    });
+    // console.log(teamDRecords);
+
+    return sdifStr.concat(output.z0Record);
+  };
+
+  return { buildSdifFile };
 };
-
-//
-//
-//
-//
-// output.value.c1Record = emitC1Record(
-//   teamCodes.lvwbp.lscCode+teamCodes.lvwbp.teamCode,
-//   teamCodes.lvwbp.teamName
-// );
-// //
-//
-// output.value.a0Records = [];
-// output.value.a0Records.push(
-//   emitD0Record(
-//     swimmerEventRecord.fullName.value,
-//     swimmerEventRecord.MMNumber.value,
-//     swimmerEventRecord.dob.value,
-//     swimmerEventRecord.gender.value,
-//     swimmerEventRecord.eventGender.value,
-//     swimmerEventRecord.eventDistance.value,
-//     swimmerEventRecord.eventStrokeCode.value,
-//     swimmerEventRecord.eventAge.value,
-//     meetStartDate.value
-//   )
-// );
-//
-// swimmerEventRecord.eventDistance.value = "50";
-// swimmerEventRecord.eventStrokeCode.value = "3";
-//
-// output.value.a0Records.push(
-//   emitD0Record(
-//     swimmerEventRecord.fullName.value,
-//     swimmerEventRecord.MMNumber.value,
-//     swimmerEventRecord.dob.value,
-//     swimmerEventRecord.gender.value,
-//     swimmerEventRecord.eventGender.value,
-//     swimmerEventRecord.eventDistance.value,
-//     swimmerEventRecord.eventStrokeCode.value,
-//     swimmerEventRecord.eventAge.value,
-//     meetStartDate.value
-//   )
-// );
-//
-// output.value.d1Record = emitD1Record(
-//   teamCodes.lvwbp.lscCode+swimmerEventRecord.teamCode,
-//   swimmerEventRecord.fullName.value,
-//   swimmerEventRecord.MMNumber.value,
-//   swimmerEventRecord.dob.value,
-//   swimmerEventRecord.gender.value
-// );
-//
-// //
-// output.z0Record = emitZ0Record();
-
-// console.log(emitZ0Record("1", "2", "3"));
-
-// console.log("A0 record: ", output.a0Record.length);
-// console.log("B1 record: ", output.b1Record.length);
-// console.log("C1 record: ", output.c1Record.length);
-// console.log("D0 record: ", output.d0Records.value.length);
-// console.log("D1 record: ", output.d1Record.length);
-// console.log("Z0 record: ", output.z0Record.length);

@@ -1,52 +1,57 @@
 import {
   getDistanceAndStrokeCode,
   getFullName,
+  getSwimmerAge,
   splitStringOnComma,
+  getMMNumber,
+  getTeamCode,
+  getLSCCode,
 } from "~/utils/utilFunctions";
+import { sdifConst } from "~/schemas/eventInfo";
 
-interface SwimmerRecord {
-  events: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  dob: string;
-  teamCode: string;
-  gender: string;
-  eventCount: string;
-}
 export const createSwimmerRecords = (
-  swimmerRecord: any,
+  swimmerRecord: {
+    events: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    dob: string;
+    teamCode: string;
+    gender: string;
+    eventAge?: string | undefined;
+    eventGender?: string | undefined;
+  },
   meetStartDate: string
 ) => {
+  const individualEventRecords: string[] = [];
+
   const registeredEvents: string[] = splitStringOnComma(
     swimmerRecord["events"]
   );
 
-  const swimmerEventArr = [];
-  let swimmerD1Record = "";
-
   const seedTime: string = "NT";
-  const eventAge = "13UN";
-  const eventGender = "X";
+  const eventAge: string =
+    swimmerRecord["eventAge"] || sdifConst.EVENTAGECode025;
+  const eventGender: string =
+    swimmerRecord["eventGender"] || sdifConst.EVENTSEXCode011[2];
   const eventDate = meetStartDate;
   const dob = swimmerRecord["dob"];
   const gender = swimmerRecord["gender"];
+  // const teamCode = swimmerRecord["teamCode"] || "LVW";
+  const teamCode = getTeamCode(swimmerRecord["teamCode"]);
+  const teamLSC = getLSCCode(swimmerRecord["teamCode"]);
+
+  const age = getSwimmerAge(dob);
 
   const fullName: string = getFullName(
     swimmerRecord["firstName"],
     swimmerRecord["lastName"]
   );
-  const MMNumber = getMMNumber(
-    swimmerRecord.teamCode,
-    swimmerRecord.firstName,
-    swimmerRecord.lastName,
-    swimmerRecord.dob,
-    swimmerRecord.middleName
-  );
+  const MMNumber = getMMNumber(swimmerRecord);
 
   for (const ev of registeredEvents) {
     const { eventDistance, eventStrokeCode } = getDistanceAndStrokeCode(ev);
-    const eventD0Record = emitD0Record({
+    const { d0Record } = emitD0Record({
       fullName,
       dob,
       eventDistance,
@@ -58,10 +63,18 @@ export const createSwimmerRecords = (
       eventDate,
       seedTime,
     });
-    console.log(eventD0Record);
-    swimmerEventArr.push(eventD0Record);
+    individualEventRecords.push(d0Record);
   }
 
+  const { d1Record } = emitD1Record({
+    teamCode,
+    fullName,
+    MMNumber,
+    dob,
+    age,
+    gender,
+  });
+  individualEventRecords.push(d1Record);
   // if (parseInt(swimmerRecord["eventCount"]) !== registeredEvents.length) {
   //   throw new Error("Registered events do not match event count.");
   // }
@@ -70,8 +83,11 @@ export const createSwimmerRecords = (
     return registeredEvents;
   };
 
+  const getEventsRecords = () => {
+    return individualEventRecords;
+  };
+  // console.log(getEventsRecords());
   // D0 for every event D1 for a swimmer
 
-  const swimmerD0Records = swimmerEventArr;
-  return { swimmerD0Records, swimmerD1Record };
+  return { individualEventRecords, teamCode, teamLSC };
 };

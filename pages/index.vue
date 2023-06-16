@@ -32,7 +32,7 @@ import TheFooter from "~/components/navigation/TheFooter.vue";
     </div>
   </header>
   <section
-    class="min-h-96 px-8 md:px-12 py-12 mx-auto flex justify-center max-w-4xl flex-wrap"
+    class="min-h-96 px-8 md:px-12 py-12 mx-auto flex justify-center max-w-7xl flex-wrap"
   >
     <ConvertForm />
   </section>

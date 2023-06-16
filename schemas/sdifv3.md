@@ -281,6 +281,11 @@ def EmitZ0 ():
 
 ```
 
+
+## Input CSV File Structure
+
+Entries from 0 to 12 are important to stay as they are.
+
 | Position | Mandatory | Fields                                    |
 |----------|-----------|-------------------------------------------|
 | 0        |           | Submission Time                           |

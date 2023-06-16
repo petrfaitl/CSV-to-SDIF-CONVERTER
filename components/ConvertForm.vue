@@ -12,7 +12,7 @@ const submitted = ref(false);
 const meetName = ref("Coach Sam's Farewell Club Night");
 const meetStartDate = ref("2023-06-24");
 const meetEndDate = meetStartDate;
-const meetOrganiserCode = ref("LVW");
+const meetOrganiserCode = ref("");
 
 const meetOrganiserDetails = ref({});
 
@@ -37,7 +37,7 @@ const handleSubmit = (data) => {
   const swimmerData = getDataRows(csvData);
 
   // replace csv data with value of input from text area
-  sd3Str.value = createEvent(
+  const event = createEvent(
     swimmerData,
     mandatoryColumnsObj.value,
     meetStartDate.value,
@@ -45,10 +45,10 @@ const handleSubmit = (data) => {
     meetName.value,
     meetOrganiserDetails.value
   );
-
+  sd3Str.value = event.buildSdifFile();
+  console.log(event);
   submitted.value = true;
 
-  // in production we'll be returning sd3str
   return true;
 };
 
@@ -56,6 +56,9 @@ function clearForm() {
   reset("convertForm");
 }
 
+onMounted(() => {
+  meetOrganiserCode.value = "LVW";
+});
 watch(meetOrganiserCode, () => {
   meetOrganiserDetails.value = meetConfig.getOrganiserByCode(
     meetOrganiserCode.value
@@ -72,12 +75,12 @@ watch(meetOrganiserCode, () => {
       @submit="handleSubmit"
       :actions="false"
       id="convertForm"
-      form-class="grid grid-cols-12 gap-4"
+      form-class="grid grid-cols-12 gap-4 max-w-4xl"
     >
       <template #default="{ state }">
         <h1 class="col-start-2 col-span-6 font-semibold mb-2">Instructions</h1>
         <p class="col-start-2 col-span-6 text-sm mb-8">
-          Open the downloaded scv file in a plain text editor. Copy all contents
+          Open the downloaded csv file in a plain text editor. Copy all contents
           of the file and paste them to the input below.
         </p>
 
@@ -140,24 +143,22 @@ watch(meetOrganiserCode, () => {
             </template>
           </FormKit>
         </div>
-
-        <transition name="fade">
-          <!--            v-if="submitted"-->
-          <CodeOutput
-            border="thin"
-            spacing="thin"
-            :status="submitted"
-            :output="sd3Str"
-            class="col-start-1 col-span-full"
-          >
-            <template #title>SD3 File Content</template>
-          </CodeOutput>
-        </transition>
-        <div class="col-start-1 col-span-full">
-          <!--          {{ state }}-->
-        </div>
       </template>
     </FormKit>
+  </div>
+  <div class="section w-full">
+    <transition name="fade">
+      <!--            v-if="submitted"-->
+      <CodeOutput
+        border="thin"
+        spacing="thin"
+        :status="submitted"
+        :output="sd3Str"
+        class="col-start-1 col-span-full"
+      >
+        <template #title>SD3 File Content</template>
+      </CodeOutput>
+    </transition>
   </div>
 </template>
 

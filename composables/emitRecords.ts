@@ -714,13 +714,14 @@ export const emitD0Record = (eventRecord: {
   return { d0Record };
 };
 
-export const emitD1Record = (
-  teamCode: string,
-  fullName: string,
-  MMNumber: string,
-  dob: string,
-  gender: string
-) => {
+export const emitD1Record = (swimmerRecord: {
+  teamCode: string;
+  fullName: string;
+  MMNumber: string;
+  dob: string;
+  age: string;
+  gender: string;
+}) => {
   const d1Schema = {
     1: {
       start: 1,
@@ -751,7 +752,7 @@ export const emitD1Record = (
       length: 6,
       required: true,
       type: "code",
-      value: teamCode,
+      value: swimmerRecord.teamCode,
       desc: "Team Code",
     },
     5: {
@@ -767,7 +768,7 @@ export const emitD1Record = (
       length: 28,
       required: true,
       type: "name",
-      value: fullName,
+      value: swimmerRecord.fullName,
       desc: "Swimmers name",
     },
     7: {
@@ -783,7 +784,7 @@ export const emitD1Record = (
       length: 12,
       required: true,
       type: "alpha",
-      value: MMNumber,
+      value: swimmerRecord.MMNumber,
       desc: "Swimmers MM Number",
     },
     9: {
@@ -791,7 +792,7 @@ export const emitD1Record = (
       length: 1,
       required: false,
       type: "code",
-      value: fullName,
+      value: swimmerRecord.fullName,
       desc: "Attach Code 016",
     },
     10: {
@@ -807,7 +808,7 @@ export const emitD1Record = (
       length: 8,
       required: true,
       type: "date",
-      value: getDateMMDDYYYY(dob),
+      value: getDateMMDDYYYY(swimmerRecord.dob),
       desc: "Swimmer's dob",
     },
     12: {
@@ -815,7 +816,7 @@ export const emitD1Record = (
       length: 2,
       required: false,
       type: "alpha",
-      value: getSwimmerAge(dob),
+      value: swimmerRecord.age,
       desc: "Swimmer's age",
     },
     13: {
@@ -823,7 +824,7 @@ export const emitD1Record = (
       length: 1,
       required: true,
       type: "code",
-      value: gender,
+      value: swimmerRecord.gender,
       desc: "Gender Code 010",
     },
     14: {
@@ -886,7 +887,7 @@ export const emitD1Record = (
 
   const d1Record: string = createSchemaRecord(d1Schema);
 
-  return d1Record;
+  return { d1Record };
 };
 
 export const emitZ0Record = (

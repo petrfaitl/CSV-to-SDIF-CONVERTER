@@ -5,7 +5,10 @@ export const toFixedLength = function (
   length: number,
   padCharacter = " "
 ) {
-  return value.toString().substring(0, length).padEnd(length);
+  if (value) {
+    return value.toString().substring(0, length).padEnd(length);
+  }
+  return "".padEnd(length);
 };
 
 export const getDateMMDDYYYY = (dateStr = "") => {
@@ -22,9 +25,32 @@ export const getDateMMDDYYYY = (dateStr = "") => {
   return month + day + year;
 };
 
+const getDateMMDDYY = (dateStr: string) => {
+  const [dayStr, monthStr, yearStr] = dateStr.split("/");
+  dateStr = yearStr + "-" + monthStr + "-" + dayStr;
+  const currentDate = new Date(dateStr);
+
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+  const day = currentDate.getDate().toString().padStart(2, "0");
+  const year = currentDate.getFullYear().toString().substring(2, 4);
+
+  return month + day + year;
+};
+
+/**
+ *
+ * @param dob as YYYY-MM-DD or DD/MM/YYYY
+ */
 export const getSwimmerAge = (dob: string) => {
   const today = Date.parse(new Date().toString());
-  const dobDate = Date.parse(new Date(dob).toString());
+  let dobDate;
+  if (dob.includes("/")) {
+    const [dd, mm, yyyy] = dob.split("/");
+    dobDate = Date.parse(yyyy + "-" + mm + "-" + dd);
+  } else {
+    dobDate = Date.parse(new Date(dob).toString());
+  }
+
   const msDiff = today - dobDate;
 
   let seconds = Math.round(msDiff / 1000);
@@ -39,7 +65,7 @@ export const getSwimmerAge = (dob: string) => {
   // days = days % 365;
   years = years % 365;
 
-  return years;
+  return years.toString();
 };
 
 export const getTeamCode = (teamStr: string) => {
@@ -49,22 +75,37 @@ export const getTeamCode = (teamStr: string) => {
   return teamCodes[team]?.teamCode ?? teamCodes["undefined"].teamCode;
 };
 
+export const getLSCCode = (teamStr: string) => {
+  let team: string = teamStr.toLowerCase();
+
+  // @ts-ignore
+  return teamCodes[team]?.lscCode ?? teamCodes["undefined"].lscCode;
+};
+export const getTeamName = (teamCode: string): string => {
+  let team: string = teamCode.toLowerCase();
+  // @ts-ignore
+  return teamCodes[team]?.teamName ?? teamCodes["undefined"].teamName;
+};
+
 export const getFullName = (firstName: string, lastName: string) =>
   lastName + ", " + firstName;
 
-export const getMMNumber = (
-  teamCode: string,
-  firstName: string,
-  lastName: string,
-  dob: string,
-  middleName: string = "Z"
-) => {
+export const getMMNumber = (swimmerRecord: {
+  teamCode: string;
+  firstName: string;
+  lastName: string;
+  dob: string;
+  middleName: string;
+}) => {
+  const middleName = swimmerRecord.middleName?.length
+    ? swimmerRecord.middleName[0]
+    : "Z";
   return (
-    teamCode.substring(2, 5) +
-    lastName[0] +
-    firstName[0] +
-    middleName[0] +
-    dob.replaceAll("/", "")
+    swimmerRecord.teamCode.substring(0, 2) +
+    swimmerRecord.lastName[0] +
+    swimmerRecord.firstName[0] +
+    middleName +
+    getDateMMDDYY(swimmerRecord.dob)
   );
 };
 
@@ -142,8 +183,8 @@ export const filterAndNameColumns = (
       }
     });
 
-    return filteredArr.reduce((accummulator, el, index) => {
-      return { ...accummulator, [columnIndices[index]["key"]]: el };
+    return filteredArr.reduce((accumulator, el, index) => {
+      return { ...accumulator, [columnIndices[index]["key"]]: el };
     }, {});
   });
 };
