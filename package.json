@@ -1,4 +1,5 @@
 {
+  "version": "0.1",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -19,6 +20,7 @@
     "prettier": "^2.8.4"
   },
   "dependencies": {
-    "@formkit/core": "^0.17.2"
+    "@formkit/core": "^0.17.2",
+    "@heroicons/vue": "^2.0.18"
   }
 }

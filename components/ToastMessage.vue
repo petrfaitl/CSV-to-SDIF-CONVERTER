@@ -35,7 +35,7 @@ watch(ready, () => {
   <Transition name="fade" :duration="150">
     <div
       v-show="isVisible"
-      class="absolute bg-primary px-2.5 -top-16 py-3 min-w-[50px] min-h-[30px] leading-3 w-auto rounded-lg translate-x-1/2 right-1/2"
+      class="absolute text-xs bg-primary px-2.5 -top-16 py-3 min-w-[50px] min-h-[30px] leading-3 w-auto rounded-lg translate-x-1/2 right-1/2"
     >
       <div class="relative">
         {{ message }}

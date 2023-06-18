@@ -1,9 +1,9 @@
 <script setup>
-// import {submit} from "@formkit/icons";
-import { FormKitIcon, FormKitSchema, createInput } from "@formkit/vue";
+import { createInput } from "@formkit/vue";
 import { reset } from "@formkit/core";
 import { raceSchema } from "assets/races/events.js";
 import FormCheckboxFormKit from "~/formkit-components/FormCheckboxFormKit.vue";
+import { ArrowPathIcon } from "@heroicons/vue/24/outline";
 
 function wait(ms) {
   return new Promise((resolve) => {
@@ -139,7 +139,7 @@ const value = ref([]);
             prefix-icon-class="animate-spin"
           >
             <template #prefixIcon v-if="state.loading">
-              <FormKitIcon icon="spinner" class="animate-spin h-5 mr-2" />
+              <ArrowPathIcon class="animate-spin h-5 mr-2" />
             </template>
             <template #default>
               {{ !state.loading ? "Register" : "Loading" }}
@@ -148,7 +148,7 @@ const value = ref([]);
         </div>
 
         <transition name="fade">
-          <BaseNotice
+          <ToolTip
             v-if="submitted"
             border="thin"
             spacing="thin"
@@ -157,7 +157,7 @@ const value = ref([]);
             <template #text>
               Your registration has been submitted successfully.
             </template>
-          </BaseNotice>
+          </ToolTip>
         </transition>
         <div class="col-span-full">
           {{ state }}

@@ -1,6 +1,4 @@
 <script setup>
-// import {submit} from "@formkit/icons";
-// import { FormKitIcon, FormKitSchema, createInput } from "@formkit/vue";
 import { reset } from "@formkit/core";
 
 import { meetConfig } from "~/schemas/eventInfo";
@@ -18,7 +16,7 @@ const meetOrganiserDetails = ref({});
 
 const meetData = ref("");
 const meetHeader = ref("");
-const mandatoryColumns = ref([4, 5, 6, 7, 8, 9, 11]);
+
 const mandatoryColumnsObj = ref([
   { key: "teamCode", index: 4 },
   { key: "firstName", index: 5 },
@@ -46,13 +44,13 @@ const handleSubmit = (data) => {
     meetOrganiserDetails.value
   );
   sd3Str.value = event.buildSdifFile();
-  console.log(event);
   submitted.value = true;
 
   return true;
 };
 
 function clearForm() {
+  submitted.value = false;
   reset("convertForm");
 }
 
@@ -67,7 +65,7 @@ watch(meetOrganiserCode, () => {
 </script>
 
 <template>
-  <div class="text-sm">
+  <div class="text-sm w-full max-w-2xl">
     <FormKit
       type="form"
       :ignore="false"
@@ -75,15 +73,9 @@ watch(meetOrganiserCode, () => {
       @submit="handleSubmit"
       :actions="false"
       id="convertForm"
-      form-class="grid grid-cols-12 gap-4 max-w-4xl"
+      form-class="grid grid-cols-12 gap-4 "
     >
       <template #default="{ state }">
-        <h1 class="col-start-2 col-span-6 font-semibold mb-2">Instructions</h1>
-        <p class="col-start-2 col-span-6 text-sm mb-8">
-          Open the downloaded csv file in a plain text editor. Copy all contents
-          of the file and paste them to the input below.
-        </p>
-
         <FormKit
           type="date"
           label="Event Date"
@@ -91,7 +83,7 @@ watch(meetOrganiserCode, () => {
           placeholder="Event date"
           validation="required|date"
           name="meet-date"
-          outer-class=" col-start-2 col-span-4 "
+          outer-class="col-start-1 col-span-6 "
         />
         <FormKit
           type="text"
@@ -100,7 +92,7 @@ watch(meetOrganiserCode, () => {
           v-model="meetName"
           placeholder="Enter the name of the meet"
           validation="required|length:3"
-          outer-class="col-start-7 col-span-4 "
+          outer-class="col-start-7 col-span-6 "
         />
         <FormKit
           type="select"
@@ -112,19 +104,20 @@ watch(meetOrganiserCode, () => {
           validation="required"
           wrapper-class="$reset max-w-full w-full"
           selectIcon-class="$reset formkit-select-icon flex p-[3px] shrink-0 w-5 mr-2 -ml-[1.5em] pointer-events-none formkit-icon"
-          outer-class="col-start-2 col-span-9 "
+          outer-class="col-start-1 col-span-9 "
         />
         <FormKit
           type="textarea"
           label="Input"
           placeholder="Paste your data here"
-          validation="string"
+          validation="string|required"
           name="convert-area"
           wrapper-class="$reset max-w-full w-full"
-          inner-class="$reset formkit-disabled:bg-gray-200 formkit-disabled:cursor-not-allowed formkit-disabled:pointer-events-none flex rounded mb-1 ring-1 ring-gray-400 focus-within:ring-blue-500 [&>label:first-child]:focus-within:text-blue-500 max-w-full w-full"
-          outer-class="col-start-2 col-span-9"
+          inner-class="$reset h-36 formkit-disabled:bg-gray-200 formkit-disabled:cursor-not-allowed formkit-disabled:pointer-events-none flex rounded mb-1 ring-1 ring-gray-400 focus-within:ring-blue-500 [&>label:first-child]:focus-within:text-blue-500 max-w-full w-full"
+          outer-class="col-start-1 col-span-12"
         />
-        <div class="col-start-2 col-span-8 flex gap-4 mb-4">
+
+        <div class="col-start-1 col-span-full flex gap-4 mb-4">
           <FormKit
             type="button"
             :disabled="state.loading"
@@ -132,6 +125,7 @@ watch(meetOrganiserCode, () => {
             input-class="$reset form-btn btn-secondary"
             label="Clear form"
           />
+
           <FormKit
             type="submit"
             :disabled="state.loading"
@@ -147,9 +141,9 @@ watch(meetOrganiserCode, () => {
     </FormKit>
   </div>
   <div class="section w-full">
-    <transition name="fade">
-      <!--            v-if="submitted"-->
+    <transition name="fade" duration="300">
       <CodeOutput
+        v-if="submitted"
         border="thin"
         spacing="thin"
         :status="submitted"
@@ -170,6 +164,6 @@ watch(meetOrganiserCode, () => {
 
 .fade-enter-active,
 .fade-leave-active {
-  @apply transition-opacity duration-1000;
+  @apply transition-opacity;
 }
 </style>

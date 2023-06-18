@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-// import { Bars3Icon } from "@heroicons/vue/20/solid";
+import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/outline";
 // import { useSiteDetails } from "~/composables/siteDetails";
 // import ProfileImage from "~/components/navigation/ProfileImage.vue";
 // import BaseButton from "~/components/shared/BaseButton.vue";
 // import DarkOverlay from "~/components/shared/DarkOverlay.vue";
 // import { useUserStore } from "~/stores/userStore";
 // import { storeToRefs } from "pinia";
-import { FormKitIcon } from "@formkit/vue";
 
 const user1 = {
   name: "Petr",
@@ -85,7 +84,7 @@ watch(route, () => {
             <div class="ml-auto flex items-center h-16 w-6">
               <!--            Close Button-->
               <button class="w-full" @click="closeMobileMenu">
-                <FormKitIcon icon="close" />
+                <XMarkIcon />
               </button>
             </div>
           </div>
@@ -112,7 +111,7 @@ watch(route, () => {
         <div ref="mobileMenu" class="lg:hidden flex items-center">
           <button class="w-8 h-6" @click="toggleMobileMenu">
             <!--            open button-->
-            <FormKitIcon icon="open" />
+            <Bars3Icon />
           </button>
         </div>
 

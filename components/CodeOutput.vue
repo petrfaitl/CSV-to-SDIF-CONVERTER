@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { FormKitIcon } from "@formkit/vue";
-import { useSlots, useAttrs } from "vue";
+import { useSlots } from "vue";
+import { ClipboardDocumentIcon } from "@heroicons/vue/24/outline";
 
 const slots = useSlots();
 
@@ -23,7 +23,6 @@ const { output } = toRefs(props);
 const isVisible = ref(false);
 
 const copyOutput = () => {
-  console.log(output.value);
   isVisible.value = true;
   navigator.clipboard.writeText(output.value);
 };
@@ -35,14 +34,14 @@ const hideToast = () => {
 
 <template>
   <div
-    class="relative min-h-[250px] rounded-lg border-white bg-neutral-900/80 text-neutral-50"
+    class="relative min-h-[500px] rounded-lg border-white bg-neutral-900/80 text-neutral-50"
     :class="`border-${border}`"
   >
     <div
       class="absolute top-2.5 md:top-3 right-3 w-3 h-3 md:w-6 md:h-6 cursor-pointer"
     >
       <div class="relative">
-        <FormKitIcon icon="share" class="text-white" @click="copyOutput" />
+        <ClipboardDocumentIcon class="text-white" @click="copyOutput" />
         <ToastMessage
           :isVisible="isVisible"
           message="Copied!"
@@ -57,7 +56,7 @@ const hideToast = () => {
         <slot name="title" v-if="slots.title" />
       </h3>
     </div>
-    <div class="text-xs overflow-x-auto output-h py-2 md:py-8 md:px-2">
+    <div class="text-xs overflow-x-auto output-h py-2 md:py-4 md:px-4">
       <pre data-language="text/plain"><code >{{output}}</code></pre>
     </div>
   </div>
