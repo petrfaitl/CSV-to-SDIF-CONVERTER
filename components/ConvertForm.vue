@@ -2,7 +2,7 @@
 import { reset } from "@formkit/core";
 
 import { meetConfig } from "~/schemas/eventInfo";
-import { csvData, createEvent } from "~/services/createEvent";
+import { createEvent } from "~/services/createEvent";
 import { getDataRows } from "~/utils/utilFunctions";
 // import { ClipboardIcon } from "@heroicons/vue/24/outline";
 
