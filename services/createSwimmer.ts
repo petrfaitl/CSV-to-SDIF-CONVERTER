@@ -17,6 +17,7 @@ export const createSwimmerRecords = (
     lastName: string;
     dob: string;
     teamCode: string;
+    teamLSC: string;
     gender: string;
     eventAge?: string | undefined;
     eventGender?: string | undefined;
@@ -68,6 +69,7 @@ export const createSwimmerRecords = (
 
   const { d1Record } = emitD1Record({
     teamCode,
+    teamLSC,
     fullName,
     MMNumber,
     dob,

@@ -4,6 +4,7 @@ import { reset } from "@formkit/core";
 import { meetConfig } from "~/schemas/eventInfo";
 import { csvData, createEvent } from "~/services/createEvent";
 import { getDataRows } from "~/utils/utilFunctions";
+// import { ClipboardIcon } from "@heroicons/vue/24/outline";
 
 const submitted = ref(false);
 
@@ -32,7 +33,7 @@ const sd3Str = ref("");
 const handleSubmit = (data) => {
   meetData.value = data["convert-area"];
 
-  const swimmerData = getDataRows(csvData);
+  const swimmerData = getDataRows(meetData.value);
 
   // replace csv data with value of input from text area
   const event = createEvent(
@@ -108,7 +109,7 @@ watch(meetOrganiserCode, () => {
         />
         <FormKit
           type="textarea"
-          label="Input"
+          label="CSV Data"
           placeholder="Paste your data here"
           validation="string|required"
           name="convert-area"
@@ -143,7 +144,7 @@ watch(meetOrganiserCode, () => {
   <div class="section w-full">
     <transition name="fade" duration="300">
       <CodeOutput
-        v-if="submitted"
+        v-if="true"
         border="thin"
         spacing="thin"
         :status="submitted"

@@ -283,7 +283,11 @@ export const emitB1Record = (
   return b1Record;
 };
 
-export const emitC1Record = (teamCode: string, teamName: string) => {
+export const emitC1Record = (orgRecord: {
+  teamCode: string;
+  teamLSC: string;
+  teamName: string;
+}) => {
   const c1Schema = {
     1: {
       start: 1,
@@ -314,7 +318,7 @@ export const emitC1Record = (teamCode: string, teamName: string) => {
       length: 6,
       required: true,
       type: "alpha",
-      value: teamCode,
+      value: orgRecord.teamLSC + orgRecord.teamCode,
       desc: "Team Code",
     },
     5: {
@@ -322,7 +326,7 @@ export const emitC1Record = (teamCode: string, teamName: string) => {
       length: 30,
       required: true,
       type: "alpha",
-      value: teamName,
+      value: orgRecord.teamName,
       desc: "Full Team Name",
     },
     6: {
@@ -716,6 +720,7 @@ export const emitD0Record = (eventRecord: {
 
 export const emitD1Record = (swimmerRecord: {
   teamCode: string;
+  teamLSC: string;
   fullName: string;
   MMNumber: string;
   dob: string;
@@ -752,7 +757,7 @@ export const emitD1Record = (swimmerRecord: {
       length: 6,
       required: true,
       type: "code",
-      value: swimmerRecord.teamCode,
+      value: swimmerRecord.teamLSC + swimmerRecord.teamCode,
       desc: "Team Code",
     },
     5: {

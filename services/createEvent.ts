@@ -124,7 +124,11 @@ export const createEvent = (
 
       // Adds teamCode empty string to c1Records
       Object.assign(output.c1Records, { [teamCode]: "" });
-      output.c1Records[teamCode] = emitC1Record(teamCode, teamName);
+      output.c1Records[teamCode] = emitC1Record({
+        teamCode,
+        teamLSC,
+        teamName,
+      });
 
       // c1Teams.push(teamCode);
     }

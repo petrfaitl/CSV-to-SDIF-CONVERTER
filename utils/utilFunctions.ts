@@ -92,6 +92,7 @@ export const getFullName = (firstName: string, lastName: string) =>
 
 export const getMMNumber = (swimmerRecord: {
   teamCode: string;
+  teamLSC: string;
   firstName: string;
   lastName: string;
   dob: string;
@@ -100,8 +101,9 @@ export const getMMNumber = (swimmerRecord: {
   const middleName = swimmerRecord.middleName?.length
     ? swimmerRecord.middleName[0]
     : "Z";
+  const teamCode = getTeamCode(swimmerRecord.teamCode);
   return (
-    swimmerRecord.teamCode.substring(0, 2) +
+    teamCode +
     swimmerRecord.lastName[0] +
     swimmerRecord.firstName[0] +
     middleName +
