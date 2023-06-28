@@ -37,6 +37,18 @@ const getDateMMDDYY = (dateStr: string) => {
   return month + day + year;
 };
 
+const getDateDDMMYY = (dateStr: string) => {
+  const [dayStr, monthStr, yearStr] = dateStr.split("/");
+  dateStr = yearStr + "-" + monthStr + "-" + dayStr;
+  const currentDate = new Date(dateStr);
+
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+  const day = currentDate.getDate().toString().padStart(2, "0");
+  const year = currentDate.getFullYear().toString().substring(2, 4);
+
+  return day+month + year;
+};
+
 /**
  *
  * @param dob as YYYY-MM-DD or DD/MM/YYYY
@@ -107,7 +119,7 @@ export const getMMNumber = (swimmerRecord: {
     swimmerRecord.lastName[0] +
     swimmerRecord.firstName[0] +
     middleName +
-    getDateMMDDYY(swimmerRecord.dob)
+    getDateDDMMYY(swimmerRecord.dob)
   );
 };
 

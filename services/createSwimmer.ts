@@ -8,6 +8,7 @@ import {
   getLSCCode,
 } from "~/utils/utilFunctions";
 import { sdifConst } from "~/schemas/eventInfo";
+import {emitD0Record, emitD1Record} from "~/services/emitRecords";
 
 export const createSwimmerRecords = (
   swimmerRecord: {

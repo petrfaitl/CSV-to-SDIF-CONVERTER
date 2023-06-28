@@ -79,20 +79,22 @@ watch(meetOrganiserCode, () => {
       <template #default="{ state }">
         <FormKit
           type="date"
-          label="Event Date"
+          label="Meet Date"
           v-model="meetStartDate"
-          placeholder="Event date"
+          placeholder="Meet date"
           validation="required|date"
           name="meet-date"
-          outer-class="col-start-1 col-span-6 "
+          inner-class="bg-white ring-slate-900/10"
+          outer-class="col-start-1 col-span-6"
         />
         <FormKit
           type="text"
           label="Meet Name"
           name="meet-name"
           v-model="meetName"
-          placeholder="Enter the name of the meet"
+          placeholder="Enter meet name"
           validation="required|length:3"
+          inner-class="bg-white ring-slate-900/10"
           outer-class="col-start-7 col-span-6 "
         />
         <FormKit
@@ -104,6 +106,7 @@ watch(meetOrganiserCode, () => {
           placeholder="Select Meet Organiser"
           validation="required"
           wrapper-class="$reset max-w-full w-full"
+          inner-class="bg-white ring-slate-900/10"
           selectIcon-class="$reset formkit-select-icon flex p-[3px] shrink-0 w-5 mr-2 -ml-[1.5em] pointer-events-none formkit-icon"
           outer-class="col-start-1 col-span-9 "
         />
@@ -114,7 +117,7 @@ watch(meetOrganiserCode, () => {
           validation="string|required"
           name="convert-area"
           wrapper-class="$reset max-w-full w-full"
-          inner-class="$reset h-36 formkit-disabled:bg-gray-200 formkit-disabled:cursor-not-allowed formkit-disabled:pointer-events-none flex rounded mb-1 ring-1 ring-gray-400 focus-within:ring-blue-500 [&>label:first-child]:focus-within:text-blue-500 max-w-full w-full"
+          inner-class="$reset bg-white ring-slate-900/10 h-36 formkit-disabled:bg-gray-200 formkit-disabled:cursor-not-allowed formkit-disabled:pointer-events-none flex rounded mb-1 ring-1 ring-gray-400 focus-within:ring-blue-500 [&>label:first-child]:focus-within:text-blue-500 max-w-full w-full"
           outer-class="col-start-1 col-span-12"
         />
 
