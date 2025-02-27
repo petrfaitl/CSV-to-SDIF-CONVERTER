@@ -21,7 +21,7 @@
         @apply bg-primary text-white hover:bg-opacity-80;
     }
     .btn-secondary {
-        @apply text-primary bg-white  hover:bg-primary hover:bg-opacity-20;
+        @apply text-primary bg-white  hover:bg-primary hover:bg-opacity-20 disabled:hover:bg-white;
     }
 
 

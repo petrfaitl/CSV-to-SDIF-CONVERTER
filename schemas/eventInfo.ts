@@ -1,92 +1,50 @@
+import organiserInfo from "@/schemas/organiserInfo.json";
+
+type MeetOrganiser = {
+  orgCode: string;
+  lscCode: string;
+  orgName: string;
+  orgAddress: string;
+  orgCity: string;
+  orgPostcode: string;
+  orgState: string;
+};
+
+const DEFAULT_ORGANISER_DETAILS = {
+  orgCode: "LVW",
+  lscCode: "BP",
+  orgName: "Liz Van Welie Aquatics Swimming Club",
+  orgAddress: "79 Pyes Pa Road",
+  orgCity: "Tauranga",
+  orgPostcode: "3112",
+  orgState: "BOP"
+};
+
 export const meetConfig = {
-  organiserInfo: [
-    {
-      orgCode: "LVW",
-      lscCode: "BP",
-      orgName: "Liz Van Welie Aquatics Swimming Club",
-      orgAddress: "79 Pyes Pa Road",
-      orgCity: "Tauranga",
-      orgPostcode: "3112",
-      orgState: "BOP",
-    },
-    {
-      orgCode: "EVO",
-      lscCode: "BP",
-      orgName: "Evolution Aquatics Swimming Club",
-      orgAddress: "77 Windsor Road, Otūmoetai",
-      orgCity: "Tauranga",
-      orgPostcode: "3110",
-      orgState: "BOP",
-    },
-  ],
-  getOrganiserByCode(code) {
-    for (let org of this.organiserInfo) {
-      if (org.orgCode.includes(code)) {
-        return {
-          meetOrganiser: org.orgName,
-          meetAddress: org.orgAddress,
-          meetCity: org.orgCity,
-          meetPostcode: org.orgPostcode,
-          meetState: org.orgState,
-        };
+  organiserInfo: organiserInfo as MeetOrganiser[], // Type safety for `organiserInfo`
+
+  getOrganiserByCode(code: string) {
+    const organiser = this.organiserInfo.find((o) => o.orgCode === code);
+    return organiser
+      ? {
+        meetOrganiser: organiser.orgName,
+        meetAddress: organiser.orgAddress,
+        meetCity: organiser.orgCity,
+        meetPostcode: organiser.orgPostcode,
+        meetState: organiser.orgState,
       }
-    }
-    return {
-      meetOrganiser: "",
-      meetAddress: "",
-      meetCity: "",
-      meetPostcode: "",
-      meetState: "",
-    };
+      : DEFAULT_ORGANISER_DETAILS;
   },
+
   getAllClubNamesFormSelect() {
-    let clubs = [];
-    for (const club of this.organiserInfo) {
-      const label = club.orgName;
-      const value = club.orgCode;
-      clubs.push({ label, value });
-    }
-    return clubs;
+    return this.organiserInfo.map((organiser) => ({
+      label: organiser.orgName,
+      value: organiser.orgCode,
+    }));
   },
 };
 
-export const strokeCodes = {
-  strokes: {
-    free: 1,
-    freestyle: 1,
-    back: 2,
-    backstroke: 2,
-    breast: 3,
-    breaststroke: 3,
-    fly: 4,
-    butterfly: 4,
-    im: 5,
-    "individual medley": 5,
-    medley: 5,
-  },
-};
 
-/**
- * Team Codes for Swimmer definitions
- *
- */
-export const teamCodes = {
-  lvwbp: {
-    teamCode: "LVW",
-    lscCode: "BP",
-    teamName: "LVW Aquatics Swim Club",
-  },
-  evobp: {
-    teamCode: "EVO",
-    lscCode: "BP",
-    teamName: "Evolution Swimming Club",
-  },
-  undefined: {
-    teamCode: "LVW",
-    lscCode: "BP",
-    teamName: "LVW Aquatics Swim Club",
-  },
-};
 
 export const sdifConst = {
   ORGCode001: "8",
@@ -103,7 +61,7 @@ export const sdifConst = {
     im: 5,
   },
   COURSECode013: "S",
-  EVENTAGECode025: "13UN",
+  EVENTAGECode025: "",
 };
 // File should contain one row per swimmer per event that they have entered.
 //   So if a swimmer has entered 6 events, there should be 6 rows for that swimmer.

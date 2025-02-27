@@ -428,6 +428,7 @@ export const emitD0Record = (eventRecord: {
   fullName: string;
   MMNumber: string;
   dob: string;
+  age:string;
   gender: string;
   eventGender?: string;
   eventDistance: string;
@@ -508,7 +509,7 @@ export const emitD0Record = (eventRecord: {
       length: 2,
       required: false,
       type: "alpha",
-      value: getSwimmerAge(eventRecord.dob),
+      value: eventRecord.age,
       desc: "Age or class (jnr, snr) ",
     },
     10: {

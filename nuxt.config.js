@@ -2,6 +2,7 @@
 
 // @ts-ignore
 export default defineNuxtConfig({
+  compatibilityDate: '2025-02-27',
   tailwindcss: {
     exposeConfig: true,
     viewer: false,

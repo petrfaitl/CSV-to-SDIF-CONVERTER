@@ -1,0 +1,47 @@
+[
+  {
+    "orgCode": "LVW",
+    "lscCode": "BP",
+    "orgName": "Liz Van Welie Aquatics Swimming Club",
+    "orgAddress": "79 Pyes Pa Road",
+    "orgCity": "Tauranga",
+    "orgPostcode": "3112",
+    "orgState": "BOP"
+  },
+  {
+    "orgCode": "EVO",
+    "lscCode": "BP",
+    "orgName": "Evolution Aquatics Swimming Club",
+    "orgAddress": "77 Windsor Road, Otūmoetai",
+    "orgCity": "Tauranga",
+    "orgPostcode": "3110",
+    "orgState": "BOP"
+  },
+  {
+    "orgCode": "TPS",
+    "lscCode": "BP",
+    "orgName": "Tauranga Primary School",
+    "orgAddress": "31 Fifth Avenue",
+    "orgCity": "Tauranga",
+    "orgPostcode": "3110",
+    "orgState": "BOP"
+  },
+  {
+    "orgCode": "OIS",
+    "lscCode": "BP",
+    "orgName": "Otumoetai Intermediate School",
+    "orgAddress": "5 Charles Street, Bellevue, Otūmoetai",
+    "orgCity": "Tauranga",
+    "orgPostcode": "3110",
+    "orgState": "BOP"
+  },
+  {
+    "orgCode": "OTC",
+    "lscCode": "BP",
+    "orgName": "Otumoetai College",
+    "orgAddress": "105 Windsor Road, Bellevue, Tauranga 3110",
+    "orgCity": "Tauranga",
+    "orgPostcode": "3110",
+    "orgState": "BOP"
+  }
+]

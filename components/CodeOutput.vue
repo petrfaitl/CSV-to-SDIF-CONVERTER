@@ -16,7 +16,7 @@ const props = defineProps({
   output: {
     type: String,
     default: "",
-  },
+  }
 });
 
 const { output } = toRefs(props);
@@ -57,7 +57,7 @@ const hideToast = () => {
       </h3>
     </div>
     <div class="text-xs overflow-x-auto output-h py-2 md:py-4 md:px-4">
-      <pre data-language="text/plain"><code >{{output}}</code></pre>
+      <pre data-language="text/plain"><code id="outputArea">{{output}}</code></pre>
     </div>
   </div>
 </template>

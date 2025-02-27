@@ -6,8 +6,7 @@ import {
 } from "~/services/emitRecords";
 import {
   separateAndCleanRecords,
-  filterAndNameColumns,
-  getTeamName,
+  filterAndNameColumns
 } from "~/utils/utilFunctions";
 import { createSwimmerRecords } from "~/services/createSwimmer";
 
@@ -51,14 +50,15 @@ export const createEvent = (
 
   // Creates an Array of Arrays of all data separated records by line breaks; erroneous characters are removed
   const separatedRecords: string[][] = separateAndCleanRecords(swimmerData);
+  // console.log(separatedRecords);
 
   // Array contains only required data for building Swimmer Record
   const swimmerEventRecords: object[] = filterAndNameColumns(
     separatedRecords,
     headerColumns
   );
+  console.log(swimmerEventRecords);
 
-  // Replace with loop
 
   /**
    * Push a0, b1 and z record to an object variable
@@ -79,12 +79,11 @@ export const createEvent = (
    * Loops over all swimmer records
    */
 
-  swimmerEventRecords.forEach((swimmerRecord: any) => {
-    const { individualEventRecords, teamCode, teamLSC } = createSwimmerRecords(
+  swimmerEventRecords.forEach((swimmerRecord : Object) => {
+    const { individualEventRecords, teamCode, teamLSC, teamName } = createSwimmerRecords(
       swimmerRecord,
       meetStartDate
     );
-    const teamName: string = getTeamName(teamCode + teamLSC);
 
     // Test if teamCode in dRecords
     if (!Object.hasOwn(output.dRecords, teamCode)) {

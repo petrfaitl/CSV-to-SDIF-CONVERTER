@@ -35,7 +35,7 @@ const submitted = ref(false);
 async function handleSubmit(data) {
   // this.$formkit.;
   await wait(3000);
-  console.log(data);
+  // console.log(data);
   submitted.value = true;
   return true;
 }

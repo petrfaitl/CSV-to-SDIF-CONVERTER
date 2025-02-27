@@ -1,4 +1,6 @@
-import { teamCodes, strokeCodes } from "@/schemas/eventInfo";
+import strokes from '@/schemas/swimming_stroke_codes.json';
+import teamCodes from '@/schemas/swimming_team_directory.json';
+
 
 export const toFixedLength = function (
   value: string,
@@ -46,7 +48,7 @@ const getDateDDMMYY = (dateStr: string) => {
   const day = currentDate.getDate().toString().padStart(2, "0");
   const year = currentDate.getFullYear().toString().substring(2, 4);
 
-  return day+month + year;
+  return day + month + year;
 };
 
 /**
@@ -80,24 +82,18 @@ export const getSwimmerAge = (dob: string) => {
   return years.toString();
 };
 
-export const getTeamCode = (teamStr: string) => {
-  let team: string = teamStr.toLowerCase();
+export const getTeamRecord = (teamStr: string) => {
+  // Normalize the input team identifier
+  const normalizedTeam = teamStr.toLowerCase().trim();
 
-  // @ts-ignore
-  return teamCodes[team]?.teamCode ?? teamCodes["undefined"].teamCode;
+  // Search for the team record or fall back to the default undefined record
+  return (
+    teamCodes.find(t => t.id === normalizedTeam) ||
+    teamCodes.find(t => t.id === "undefined")
+  );
 };
 
-export const getLSCCode = (teamStr: string) => {
-  let team: string = teamStr.toLowerCase();
 
-  // @ts-ignore
-  return teamCodes[team]?.lscCode ?? teamCodes["undefined"].lscCode;
-};
-export const getTeamName = (teamCode: string): string => {
-  let team: string = teamCode.toLowerCase();
-  // @ts-ignore
-  return teamCodes[team]?.teamName ?? teamCodes["undefined"].teamName;
-};
 
 export const getFullName = (firstName: string, lastName: string) =>
   lastName + ", " + firstName;
@@ -113,7 +109,8 @@ export const getMMNumber = (swimmerRecord: {
   const middleName = swimmerRecord.middleName?.length
     ? swimmerRecord.middleName[0]
     : "Z";
-  const teamCode = getTeamCode(swimmerRecord.teamCode);
+  const teamRecord = getTeamRecord(swimmerRecord.teamCode);
+  const teamCode: string = teamRecord?.teamCode ?? "UNS";
   return (
     teamCode +
     swimmerRecord.lastName[0] +
@@ -123,18 +120,94 @@ export const getMMNumber = (swimmerRecord: {
   );
 };
 
+interface StrokeCodeResponse {
+  code: string | null;
+  isValid: boolean;
+  validationErrorMessage?: string;
+}
+
 /**
+ * Gets the stroke code based on the stroke name.
+ * Normalizes input to lowercase before lookup.
  *
- * @param distanceStroke string  A string e.g. 25m Back
+ * @param {string} strokeName - The name (or alternative name) of the stroke.
+ * @returns {StrokeCodeResponse} - An object containing the stroke code, validation status,
+ * and a validation error message if not found.
  */
-export const getDistanceAndStrokeCode = (distanceStroke: string) => {
-  distanceStroke = distanceStroke.trim();
-  const [distance, stroke] = distanceStroke.split(" ");
-  const eventDistance = distance.replace("m", "");
-  // @ts-ignore
-  const eventStrokeCode = strokeCodes.strokes[stroke.toLowerCase()].toString();
-  return { eventDistance, eventStrokeCode };
+export function getStrokeCode(strokeName: string): StrokeCodeResponse {
+  if (!strokeName || typeof strokeName !== 'string') {
+    return {
+      code: null,
+      isValid: false,
+      validationErrorMessage: 'Invalid input: stroke name must be a non-empty string.',
+    };
+  }
+
+  const normalizedStrokeName = strokeName.toLowerCase();
+  const code = (strokes as Record<string, number>)[normalizedStrokeName];
+
+  if (code !== undefined) {
+    return {
+      code: code.toString(),
+      isValid: true,
+    };
+  } else {
+    return {
+      code: null,
+      isValid: false,
+      validationErrorMessage: `Stroke name "${strokeName}" is not recognized. Please provide a valid stroke name.`,
+    };
+  }
+}
+
+interface DistanceAndStrokeCodeResponse {
+  eventDistance: string;
+  eventStrokeCode: string | null;
+  isValid: boolean;
+  validationErrorMessage: string | null;
+}
+
+/**
+ * Parses a given distance and stroke input string (e.g., "25m Back")
+ * to extract event distance and stroke code, with validation.
+ *
+ * @param {string} distanceStroke - A string representing distance and stroke, e.g., "25m Back".
+ * @returns {object} An object containing `eventDistance`, `eventStrokeCode`, `isValid`, and `validationErrorMessage`.
+ */
+
+export const getDistanceAndStrokeCode = (distanceStroke: string): DistanceAndStrokeCodeResponse => {
+  if (!distanceStroke || typeof distanceStroke !== "string") {
+    return {
+      eventDistance: "",
+      eventStrokeCode: null,
+      isValid: false,
+      validationErrorMessage: "Distance and Stroke not given",
+    };
+  }
+
+  const cleanedInput = cleanEntry(distanceStroke).trim();
+  const [distance, stroke] = cleanedInput.split(" ");
+
+  if (!distance || !distance.endsWith("m") || distance.startsWith("m") || !stroke) {
+    return {
+      eventDistance: "",
+      eventStrokeCode: null,
+      isValid: false,
+      validationErrorMessage: "Invalid distance format. Expected format: '<distance>m <stroke>'",
+    };
+  }
+
+  const eventDistance = distance.slice(0, -1);
+  const eventStrokeResponse = getStrokeCode(stroke);
+
+  return {
+    eventDistance,
+    eventStrokeCode: eventStrokeResponse.code,
+    isValid: eventStrokeResponse.isValid,
+    validationErrorMessage: eventStrokeResponse.validationErrorMessage || null,
+  };
 };
+
 
 /**
  * Separates string separated by line breaks into an array of array (header and swimmer) records
@@ -152,14 +225,60 @@ export const separateAndCleanRecords = (data: string): string[][] => {
 };
 
 /**
+ * Function to prepare entry time into a fixed 8-digit format or return "NT" for invalid inputs.
+ * @param {string} entryTime - The input time in MM:SS.ss, SS.ss, or NT formats.
+ * @returns {string} - The cleaned and formatted time as an 8-character string MM:SS.ss, or "NT" for invalid entries.
+ */
+export const prepareSeedTime = (entryTime: string): string => {
+
+  try {
+    // Clean the entry time (remove unwanted characters)
+    entryTime = cleanEntry(entryTime, ["[^0-9.:]"]);
+
+    // Return "NT" for invalid or empty entry
+    if (!entryTime || entryTime === "NT" || entryTime.startsWith("NT")) {
+      return "NT";
+    }
+
+    // Split the entryTime into minutes and seconds
+    let [minutes, seconds] = entryTime.split(":");
+
+    if (!seconds) {
+      // If seconds only is provided, treat it as `SS.ss` and pad the minutes as "00"
+      seconds = minutes; // Assume the entire time is in the "seconds" position
+      minutes = "00";
+    }
+
+    // Pad the minutes and seconds to ensure proper formatting
+    minutes = minutes.padStart(2, "0");
+    seconds = parseFloat(seconds).toFixed(2).padStart(5, "0");
+
+    // Return the properly formatted time
+    return `${minutes}:${seconds}`;
+  } catch (error) {
+    // If anything fails, return "NT"
+    return "NT";
+  }
+};
+
+
+
+/**
  * Splits a string on commas but ignores commas that are preceded or followed by quotes.
  * @param str
  */
 export const splitStringOnComma = (str: string): string[] => {
   const regex = /,(?=(?:[^"]|"[^"]*")*$)/g;
+
   const newArr = str.split(regex);
+
   //trims white space
   return newArr.map((el) => {
+    if (el === "") {
+      return el;
+    }
+
+    // console.log(el);
     return el.trim();
   });
 };
@@ -171,18 +290,30 @@ export const splitStringOnComma = (str: string): string[] => {
  */
 export const cleanEntry = (
   str: string,
-  replacements: string[] = ['"', "\\"]
+  replacements: string[] = ['["\\\n]']
 ): string => {
-  replacements.forEach((el: string) => {
-    str = str.replaceAll(el, "");
-  });
-  return str;
+  // console.log("dirty string",str);
+  // str = str.trim();
+  if (typeof str !== "string") {
+    throw new TypeError("The first argument 'str' must be a string.");
+  }
+  if (!Array.isArray(replacements) || !replacements.every(el => typeof el === "string")) {
+    throw new TypeError("The 'replacements' argument must be an array of strings.");
+  }
+
+  // Create a single regex dynamically using the replacement characters
+  const regex = new RegExp(`${replacements.join("")}`, "g");
+  // console.log("applied regex",regex);
+
+  // Return cleaned string using the regex
+  return str.replace(regex, "");
 };
+
 
 /**
  * Filters array of entry data; returns array with indicated columns. These will be mandatory data for further building of sd3 file
- * @param arr
- * @param columnIndices
+ * @param arr List of separated rows of data
+ * @param columnIndices Header names and positions
  */
 export const filterAndNameColumns = (
   arr: string[][],
@@ -190,7 +321,7 @@ export const filterAndNameColumns = (
 ) => {
   return arr.map((row: string[]) => {
     const filteredArr = row.filter((_, idx) => {
-      for (const { index } of columnIndices) {
+      for (const {index} of columnIndices) {
         if (idx === index) {
           return true;
         }
@@ -198,7 +329,7 @@ export const filterAndNameColumns = (
     });
 
     return filteredArr.reduce((accumulator, el, index) => {
-      return { ...accumulator, [columnIndices[index]["key"]]: el };
+      return {...accumulator, [columnIndices[index]["key"]]: el};
     }, {});
   });
 };
@@ -223,10 +354,16 @@ export const getHeaderRow = (rawData: string) => {
 };
 
 /**
- * Extracts the header row from submitted data
+ * Extracts the data row from submitted data
  * @param rawData
- * @return Header row as string
+ * @return Data row as string
  */
 export const getDataRows = (rawData: string) => {
-  return rawData.slice(rawData.indexOf("\n") + 1, -1);
+  return rawData.slice(rawData.indexOf("\n") + 1);
 };
+
+
+export const makeFilename = (string: string) => {
+  return (string.replace(/[\/|\\:*?"<>' ]/g, "-").toLowerCase()+".sd3");
+}
+

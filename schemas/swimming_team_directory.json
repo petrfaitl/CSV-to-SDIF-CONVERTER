@@ -1,0 +1,32 @@
+[
+  {
+    "id": "undefined",
+    "teamCode": "UNS",
+    "lscCode": "BP",
+    "teamName": "Unassigned"
+  },
+  {
+    "id": "lvwbp",
+    "teamCode": "LVW",
+    "lscCode": "BP",
+    "teamName": "LVW Aquatics Swim Club"
+  },
+  {
+    "id": "evobp",
+    "teamCode": "EVO",
+    "lscCode": "BP",
+    "teamName": "Evolution Swimming Club"
+  },
+  {
+    "id": "ois",
+    "teamCode": "OIS",
+    "lscCode": "BP",
+    "teamName": "Otumoetai Intermediate School"
+  },
+  {
+    "id": "tps",
+    "teamCode": "TPS",
+    "lscCode": "BP",
+    "teamName": "Tauranga Primary School"
+  }
+]
