@@ -41,7 +41,7 @@ export const createSwimmerRecords = (
   const teamName = teamRecord?.teamName ?? "UNKNOWN";
   const age =  swimmerRecord["schoolYear"] || swimmerRecord["swimmerAge"] || getSwimmerAge(dob);
 
-  console.log(age);
+  // console.log(age);
 
   const fullName: string = getFullName(
     swimmerRecord["firstName"],

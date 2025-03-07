@@ -23,8 +23,20 @@ const navItems = [
   },
   {
     id: 1,
-    title: "Swim Entry",
-    link: "https://www.lvwasc.co.nz/club-night-entry/",
+    title: "Meet Manager Help",
+    link: "https://activenetwork.my.salesforce-sites.com/hytekswimming/",
+    type: "external",
+  },
+  {
+    id: 1,
+    title: "SDIF Specifications",
+    link: "/files/sdifv3f.txt",
+    type: "external",
+  },
+  {
+    id: 1,
+    title: "Contact Us",
+    link: "https://www.lvwasc.co.nz/contact/",
     type: "external",
   },
 ];

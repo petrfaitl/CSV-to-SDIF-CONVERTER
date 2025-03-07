@@ -54,7 +54,7 @@
           <td class="border border-gray-400 px-4 py-2">Boo</td>
 <!--          <td class="border border-gray-400 px-4 py-2"></td>-->
           <td class="border border-gray-400 px-4 py-2">Another</td>
-          <td class="border border-gray-400 px-4 py-2">01/11/2013</td>
+          <td class="border border-gray-400 px-4 py-2">23/11/2013</td>
           <td class="border border-gray-400 px-4 py-2">Male</td>
           <td class="border border-gray-400 px-4 py-2">50m Back, 100m Free</td>
           <td class="border border-gray-400 px-4 py-2">1:12.86,1:34.99</td>
@@ -101,8 +101,8 @@
     </h4>
 
     <pre class="text-white text-xs">Team,"Name - First Name","Name - Last Name","Date of Birth",Gender,"Meet Date","Enter events","School Year"
-   LVWBP,Anne,Bloggs,08/12/2015,Female,"200m Breast, 25m Butterfly","2:35.12,NT",Y5
-   EVOBP,Boo,Another,01/11/2013,Male,"50m Back, 100m Free","1:12.86,1:34.99",Y9</pre>
+   LVWBP,Anne,Bloggs,15/12/2015,Female,"200m Breast, 25m Butterfly","2:35.12,NT",Y5
+   EVOBP,Boo,Another,23/11/2013,Male,"50m Back, 100m Free","1:12.86,1:34.99",Y9</pre>
   </footer>
 </template>
 

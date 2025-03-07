@@ -43,5 +43,14 @@
     "orgCity": "Tauranga",
     "orgPostcode": "3110",
     "orgState": "BOP"
+  },
+  {
+    "orgCode": "OTH",
+    "lscCode": "BP",
+    "orgName": "Other",
+    "orgAddress": "Unknown, Tauranga 3110",
+    "orgCity": "Tauranga",
+    "orgPostcode": "3110",
+    "orgState": "BOP"
   }
 ]
