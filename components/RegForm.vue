@@ -29,7 +29,7 @@ defineProps({
     default: "5pm",
   },
 });
-const eventOptions = raceSchema();
+// const eventOptions = raceSchema();
 const submitted = ref(false);
 
 async function handleSubmit(data) {

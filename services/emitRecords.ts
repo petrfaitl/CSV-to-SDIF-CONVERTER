@@ -2,7 +2,6 @@ import { sdifConst } from "~/schemas/eventInfo";
 import "~/utils/utilFunctions";
 import {
   toFixedLength,
-  getSwimmerAge,
   getDateMMDDYYYY,
 } from "~/utils/utilFunctions";
 
@@ -82,7 +81,7 @@ export const emitA0Record = () => {
       length: 20,
       required: true,
       type: "alpha",
-      value: "LVAWSC Recorder",
+      value: "LVWASC Recorder",
       desc: "contact name",
     },
     9: {
@@ -423,16 +422,16 @@ export const emitC1Record = (orgRecord: {
 // @ts-ignore
 export const emitD0Record = (eventRecord: {
   fullName: string;
-  MMNumber: string;
   dob: string;
-  age:string;
-  gender: string;
-  eventGender?: string;
+  age: string;
   eventDistance: string;
-  eventStrokeCode: string;
-  eventAge?: string;
+  gender: string;
+  MMNumber: string;
+  eventGender: string;
+  eventStrokeCode: string | null;
+  eventAge: string;
   eventDate: string;
-  seedTime?: string;
+  seedTime: string
 }) => {
   const d0Schema = {
     1: {

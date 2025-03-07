@@ -7,12 +7,12 @@ import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/outline";
 // import { useUserStore } from "~/stores/userStore";
 // import { storeToRefs } from "pinia";
 
-const user1 = {
-  name: "Petr",
-  src: computed(() => {
-    return "https://www.gravatar.com/avatar/dedd2dc0ff33473626e6e493747547a0?s=200";
-  }),
-};
+// const user1 = {
+//   name: "Petr",
+//   src: computed(() => {
+//     return "https://www.gravatar.com/avatar/dedd2dc0ff33473626e6e493747547a0?s=200";
+//   }),
+// };
 
 const navItems = [
   {

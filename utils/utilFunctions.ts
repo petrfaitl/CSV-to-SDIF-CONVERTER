@@ -5,7 +5,7 @@ import teamCodes from '@/schemas/swimming_team_directory.json';
 export const toFixedLength = function (
   value: string,
   length: number,
-  padCharacter = " "
+  // padCharacter = " "
 ) {
   if (value) {
     return value.toString().substring(0, length).padEnd(length);
@@ -99,26 +99,48 @@ export const getFullName = (firstName: string, lastName: string) =>
   lastName + ", " + firstName;
 
 export const getMMNumber = (swimmerRecord: {
-  teamCode: string;
-  teamLSC: string;
-  firstName: string;
-  lastName: string;
-  dob: string;
-  middleName: string;
-}) => {
-  const middleName = swimmerRecord.middleName?.length
-    ? swimmerRecord.middleName[0]
-    : "Z";
-  const teamRecord = getTeamRecord(swimmerRecord.teamCode);
-  const teamCode: string = teamRecord?.teamCode ?? "UNS";
-  return (
-    teamCode +
-    swimmerRecord.lastName[0] +
-    swimmerRecord.firstName[0] +
-    middleName +
-    getDateDDMMYY(swimmerRecord.dob)
-  );
+  teamCode?: string;
+  teamLSC?: string;
+  firstName?: string;
+  lastName?: string;
+  dob?: string;
+  middleName?: string;
+}): string => {
+  // Validate the swimmerRecord parameter
+
+
+  const {
+    teamCode,
+    firstName,
+    lastName,
+    dob,
+    middleName = "Z", // Default middle initial to 'Z' if not provided
+  } = swimmerRecord;
+
+
+
+  // Ensure middleName is a single letter (if provided), or default to "Z"
+  const middleInitial = middleName?.[0]?.toUpperCase() || "Z";
+
+  // Get the team information
+  const teamRecord = getTeamRecord(teamCode || "undefined");
+  const resolvedTeamCode = teamRecord?.teamCode ?? "UNS";
+
+  try {
+    // Generate the MM number using the resolved data
+    return (
+      resolvedTeamCode +
+      lastName[0].toUpperCase() + // Take the first letter of the last name
+      firstName[0].toUpperCase() + // Take the first letter of the first name
+      middleInitial +
+      getDateDDMMYY(dob) // Format date in DDMMYY format
+    );
+  } catch (error) {
+    console.error("Error generating MM number:", error);
+    return null;
+  }
 };
+
 
 interface StrokeCodeResponse {
   code: string | null;

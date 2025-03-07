@@ -2,7 +2,7 @@
   import {reset} from "@formkit/core";
 
   import {meetConfig} from "~/schemas/eventInfo";
-  import {createEvent} from "~/services/createEvent";
+  import {createSwimEvent} from "~/services/createSwimEvent";
   import {getDataRows} from "~/utils/utilFunctions";
   import {makeFilename} from "~/utils/utilFunctions";
   // import { ClipboardIcon } from "@heroicons/vue/24/outline";
@@ -18,8 +18,8 @@
   const meetOrganiserDetails = ref({});
 
   const meetData = ref("");
-  const meetHeader = ref("");
-  const csvSchema = ref(["teamCode", "firstName", "lastName", "dob", "gender", "events", "entryTimes", "schoolYear"]);
+  // const meetHeader = ref("");
+  // const csvSchema = ref(["teamCode", "firstName", "lastName", "dob", "gender", "events", "entryTimes", "schoolYear"]);
 
 
   const mandatoryColumnsObj = ref([
@@ -80,7 +80,7 @@
   function processMeetData(data) {
     const swimmerData = getDataRows(data);
 
-    const event = createEvent(
+    const event = createSwimEvent(
         swimmerData,
         mandatoryColumnsObj.value,
         meetStartDate.value,
@@ -201,7 +201,7 @@
 
       <FormKit
           type="file"
-          v-if="inputDateType=='file'"
+          v-if="inputDateType==='file'"
           name="file-upload"
           label="Upload"
           accept=".txt,.csv"
@@ -215,7 +215,7 @@
       <FormKit
           type="textarea"
           label="CSV Data"
-          v-if="inputDateType=='textarea'"
+          v-if="inputDateType==='textarea'"
           auto-height
           placeholder="Paste your data here"
           validation="string|required"
