@@ -2,6 +2,7 @@
 import MainNav from "~/components/navigation/MainNav.vue";
 import TheFooter from "~/components/navigation/TheFooter.vue";
 import { version } from "@/package.json";
+import SampleData from "~/components/SampleData.vue";
 </script>
 
 <template>
@@ -41,6 +42,10 @@ import { version } from "@/package.json";
     class="min-h-96 px-8 md:px-12 py-12 mx-auto flex flex-col content-center items-center max-w-7xl"
   >
     <ConvertForm />
+  </section>
+  <section
+  class="bg-gray-900">
+    <SampleData />
   </section>
   <TheFooter />
 </template>

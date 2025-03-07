@@ -9,6 +9,10 @@ const props = defineProps({
     type: String,
     default: "wide",
   },
+  height:{
+    type: String,
+    default: "high"
+  },
   spacing: {
     type: String,
     default: "wide",
@@ -34,8 +38,8 @@ const hideToast = () => {
 
 <template>
   <div
-    class="relative min-h-[500px] rounded-lg border-white bg-neutral-900/80 text-neutral-50"
-    :class="`border-${border}`"
+    class="relative rounded-lg border-white bg-neutral-900/80 text-neutral-50"
+    :class="`border-${border} height-${height}`"
   >
     <div
       class="absolute top-2.5 md:top-3 right-3 w-3 h-3 md:w-6 md:h-6 cursor-pointer"
@@ -56,7 +60,7 @@ const hideToast = () => {
         <slot name="title" v-if="slots.title" />
       </h3>
     </div>
-    <div class="text-xs overflow-x-auto output-h py-2 md:py-4 md:px-4">
+    <div class="text-xs overflow-x-auto py-2 md:py-4 md:px-4">
       <pre data-language="text/plain"><code id="outputArea">{{output}}</code></pre>
     </div>
   </div>
@@ -66,12 +70,23 @@ const hideToast = () => {
 .border-wide {
   @apply border-[6px] md:border-[10px];
 }
-
+.border-none{
+  @apply border-0;
+}
 .border-thin {
+  border-width: 1px;
+}
+.border-medium {
   @apply border-2;
 }
 
-.output-h {
+.height-high {
   height: calc(100% - 53px);
+  @apply min-h-[250px];
 }
+.height-just {
+  height: auto;
+
+}
+
 </style>
