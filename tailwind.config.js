@@ -12,7 +12,7 @@ module.exports = {
   css: ["~/assets/css/tailwind.css"],
   theme: {
     fontFamily: {
-      sans: ["Montserrat", "sans"],
+      sans: ["Roboto", "sans"],
     },
     extend: {
       colors: {
