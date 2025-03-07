@@ -103,7 +103,7 @@ watch(route, () => {
           <ul class="flex flex-col gap-4 pt-6 px-6">
             <li v-for="item in navItems" :key="item.id">
               <NuxtLink
-                :to="`${item.link}`"
+                :to="item.link"
                 class="uppercase"
                 :target="item?.type === 'external' ? '_blank' : '_self'"
               >

@@ -126,9 +126,8 @@ export const emitA0Record = () => {
       desc: "future use",
     },
   };
-  const a0Record = createSchemaRecord(a0Schema);
 
-  return a0Record;
+  return createSchemaRecord(a0Schema);
 };
 
 export const emitB1Record = (
@@ -278,9 +277,8 @@ export const emitB1Record = (
       desc: "future use",
     },
   };
-  const b1Record = createSchemaRecord(b1Schema);
 
-  return b1Record;
+  return createSchemaRecord(b1Schema);
 };
 
 export const emitC1Record = (orgRecord: {
@@ -418,9 +416,8 @@ export const emitC1Record = (orgRecord: {
       desc: "future use",
     },
   };
-  const c1Record = createSchemaRecord(c1Schema);
 
-  return c1Record;
+  return createSchemaRecord(c1Schema);
 };
 
 // @ts-ignore
@@ -1064,6 +1061,5 @@ export const emitZ0Record = (
     },
   };
 
-  const z0Record: string = createSchemaRecord(z0Schema, false);
-  return z0Record;
+  return createSchemaRecord(z0Schema, false);
 };

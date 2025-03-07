@@ -1,5 +1,5 @@
 {
-  "version": "0.5",
+  "version": "0.6",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -9,18 +9,20 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@formkit/icons": "^0.17.2",
-    "@formkit/nuxt": "^0.17.2",
-    "@formkit/themes": "^0.17.2",
-    "@nuxtjs/google-fonts": "3.0.1",
-    "@nuxtjs/tailwindcss": "^6.3.0",
-    "@vueuse/core": "^10.1.2",
-    "@vueuse/nuxt": "^10.1.2",
-    "nuxt": "^3.5.1",
-    "prettier": "^2.8.4"
+    "@formkit/icons": "^1.6.9",
+    "@formkit/nuxt": "^1.6.9",
+    "@formkit/themes": "^1.6.9",
+    "@formkit/vue": "^1.6.9",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxtjs/tailwindcss": "^6.13.1",
+    "@vueuse/core": "^12.8.2",
+    "@vueuse/nuxt": "^12.8.2",
+    "nuxt": "^3.15.4",
+    "prettier": "^3.5.3"
   },
   "dependencies": {
-    "@formkit/core": "^0.17.2",
-    "@heroicons/vue": "^2.0.18"
-  }
+    "@formkit/core": "^1.6.9",
+    "@heroicons/vue": "^2.2.0"
+  },
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

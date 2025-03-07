@@ -25,11 +25,7 @@ const show = ref(false);
     <div class="flex w-6 h-6 flex-col justify-center">
       <div
         class="w-4 h-4"
-        @click="
-          {
-            show = !show;
-          }
-        "
+        @click="show = !show"
       >
         <QuestionMarkCircleIcon class="text-primary" />
       </div>
@@ -43,11 +39,7 @@ const show = ref(false);
       >
         <div
           v-show="dismissible"
-          @click="
-            {
-              show = !show;
-            }
-          "
+          @click="show = !show"
           class="absolute top-2.5 md:top-3 right-3 w-3 h-3 md:w-4 md:h-4 cursor-pointer"
         >
           <XMarkIcon class="text-white" />

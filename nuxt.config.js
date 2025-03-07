@@ -5,10 +5,10 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-02-27",
   tailwindcss: {
     exposeConfig: true,
-    viewer: false,
+    viewer: false
   },
   imports: {
-    dirs: ["components/"],
+    dirs: ["components/"]
   },
   modules: [
     "@formkit/nuxt",
@@ -21,18 +21,18 @@ export default defineNuxtConfig({
         exposeConfig: true,
         config: {},
         injectPosition: 0,
-        viewer: false,
-      },
+        viewer: false
+      }
     ],
-    "@nuxtjs/google-fonts",
+    "@nuxtjs/google-fonts"
   ],
   googleFonts: {
     families: {
-      Montserrat: [200, 400, 600, 900],
+      Montserrat: [200, 400, 600, 900]
     },
-    display: "swap",
+    display: "swap"
   },
   routeRules: {
-    "/**": { ssr: false },
-  },
+    "/**": { ssr: false }
+  }
 });
