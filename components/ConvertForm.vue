@@ -154,6 +154,7 @@
           placeholder="Meet date"
           validation="required|date"
           name="meet-date"
+          label-class="$reset block mb-1 text-sm font-medium"
           inner-class="bg-white ring-slate-900/10"
           outer-class="col-start-1 col-span-full md:col-start-1 md:col-span-6"
       />
@@ -163,6 +164,7 @@
           name="meet-name"
           v-model="meetName"
           placeholder="Enter meet name"
+          label-class="$reset block mb-1 text-sm font-medium"
           validation="required|length:3"
           inner-class="bg-white ring-slate-900/10"
           outer-class="col-start-1 col-span-full md:col-start-7 md:col-span-6 "
@@ -175,6 +177,7 @@
           :options="meetConfig.getAllClubNamesFormSelect()"
           placeholder="Select Meet Organiser"
           validation="required"
+          label-class="$reset block mb-1 text-sm font-medium"
           wrapper-class="$reset max-w-full w-full"
           inner-class="bg-white ring-slate-900/10"
           selectIcon-class="$reset formkit-select-icon flex p-[3px] shrink-0 w-5 mr-2 -ml-[1.5em] pointer-events-none formkit-icon"
@@ -207,6 +210,7 @@
           accept=".txt,.csv"
           help="Select an entry file in .csv or .txt format"
           multiple="false"
+          label-class="$reset block mb-1 text-sm font-medium"
           wrapper-class="$reset max-w-lg"
           outer-class="col-start-1 col-span-full md:col-start-1 md:col-span-6"
         />

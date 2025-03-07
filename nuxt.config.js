@@ -28,7 +28,7 @@ export default defineNuxtConfig({
   ],
   googleFonts: {
     families: {
-      Montserrat: [200, 400, 600, 900],
+      Montserrat: [200, 300, 400, 500, 600, 700, 900],
       Roboto:[200, 400, 600, 900]
     },
     display: "swap"
