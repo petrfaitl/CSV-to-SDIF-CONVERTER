@@ -20,55 +20,55 @@
   {
     "id": "ois",
     "teamCode": "OIS",
-    "lscCode": "",
+    "lscCode": "BP",
     "teamName": "Otumoetai Intermediate School"
   },
   {
     "id": "tps",
     "teamCode": "TPS",
-    "lscCode": "",
+    "lscCode": "BP",
     "teamName": "Tauranga Primary School"
   },
   {
     "id": "wcwo",
     "teamCode": "WCWO",
-    "lscCode": "",
+    "lscCode": "BP",
     "teamName": "WBOP - West Cluster"
   },
   {
     "id": "mcwb",
     "teamCode": "MCWB",
-    "lscCode": "",
+    "lscCode": "BP",
     "teamName": "WBOP - Mount Cluster"
   },
   {
     "id": "ecwo",
     "teamCode": "ECWO",
-    "lscCode": "",
+    "lscCode": "BP",
     "teamName": "WBOP - East Cluster"
   },
   {
     "id": "ncwb",
     "teamCode": "NCWB",
-    "lscCode": "",
+    "lscCode": "BP",
     "teamName": "WBOP - North Cluster"
   },
   {
     "id": "tpwb",
     "teamCode": "TPWB",
-    "lscCode": "",
+    "lscCode": "BP",
     "teamName": "WBOP - Te Puke Cluster"
   },
   {
     "id": "papa",
     "teamCode": "PAPA",
-    "lscCode": "",
+    "lscCode": "BP",
     "teamName": "WBOP - Papamoa Cluster"
   },
   {
     "id": "scwb",
     "teamCode": "SCWB",
-    "lscCode": "",
+    "lscCode": "BP",
     "teamName": "WBOP - South Cluster"
   }
 ]
