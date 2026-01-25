@@ -81,7 +81,7 @@ export const createSwimmerRecords = (
 const getTeamInformation = (teamCode: string) => {
   const teamRecord = getTeamRecord(teamCode);
   return {
-    teamCode: teamRecord?.teamCode ?? "UNKNOWN",
+    teamCode: teamRecord?.teamCode ?? "",
     teamLSC: teamRecord?.lscCode ?? "UNKNOWN",
     teamName: teamRecord?.teamName ?? "UNKNOWN",
   };
@@ -116,10 +116,11 @@ const generateEventRecords = (
   // Loop through each registered event
   registeredEvents.forEach((ev, index) => {
     const distanceStrokeCode = getDistanceAndStrokeCode(ev);
+
     if (!distanceStrokeCode.isValid) {
       // Log the error and skip invalid event
       console.error(
-        `Invalid distance/stroke for event '${ev}': ${distanceStrokeCode.validationErrorMessage}`
+        `Invalid distance/stroke for '${fullName}' event '${ev}': ${distanceStrokeCode.validationErrorMessage}`
       );
       return;
     }
