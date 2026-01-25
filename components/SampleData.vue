@@ -17,7 +17,7 @@ EVOBP,Boo,Another,23/11/2013,Male,\"50m Back, 100m Free\",\"1:12.86,1:34.99\",Y9
     </h4>
 
     <h4 class="text-2xl text-primary mt-6 mb-4">Items and Descriptions</h4>
-    <ol class="text-sm list-decimal pl-8 text-gray-200 grid grid-flow-col grid-cols-3 grid-rows-5 md:grid-rows-3 gap-4 md:gap-8 ">
+    <ol class="text-sm list-decimal pl-8 text-gray-200 grid grid-cols-3 grid-rows-5 md:grid-rows-3 gap-4 md:gap-8 ">
       <li class="mt-4 ">
         <strong>Team Code:</strong><br> The unique code identifying the team associated with the entry. Three digit
         code.<br><span class="font-semibold">Required</span>
@@ -57,6 +57,8 @@ EVOBP,Boo,Another,23/11/2013,Male,\"50m Back, 100m Free\",\"1:12.86,1:34.99\",Y9
         Entries Table
       </h4>
       <!-- Table display -->
+      <div class="overflow-x-auto">
+
       <table class="table-auto border-collapse border border-gray-400 mx-auto w-full md:w-10/12 text-sm">
         <thead>
         <tr class="bg-gray-900 text-gray-200">
@@ -97,6 +99,7 @@ EVOBP,Boo,Another,23/11/2013,Male,\"50m Back, 100m Free\",\"1:12.86,1:34.99\",Y9
         </tr>
         </tbody>
       </table>
+        </div>
     </div>
 
 
