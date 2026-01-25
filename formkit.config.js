@@ -1,9 +1,12 @@
-import { generateClasses } from "@formkit/themes";
-import genesis from "@formkit/themes/tailwindcss/genesis";
+import { defineFormKitConfig } from '@formkit/vue'
+import { rootClasses } from './formkit.theme.ts'
+import { genesisIcons } from '@formkit/icons'
 
-export default {
-  theme: "genesis",
+export default defineFormKitConfig({
   config: {
-    classes: generateClasses(genesis),
+    rootClasses
   },
-};
+  icons: {
+    ...genesisIcons
+  }
+})

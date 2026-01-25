@@ -94,8 +94,6 @@
   }
 
 
-
-
   function downloadFile() {
     if (sd3Str.value) {
       const blob = new Blob([sd3Str.value], {type: "text/plain"});
@@ -115,11 +113,21 @@
   function clearForm() {
     submitted.value = false;
     reset("convertForm");
-    sd3Str.value = "";
+    // Reset manually tracked fields to their initial values
+    meetName.value = "A Club Night";
+    meetStartDate.value = new Date().toISOString()
+                                    .split('T')[0]; // Today's date
+    meetEndDate.value = meetStartDate.value;
+    meetOrganiserDetails.value = {};
+    // meetOrganiserCode.value = "LVW";
+    inputDateType.value = "file";
+    meetData.value = "";
+    sd3Str.value = ""; // Clear generated SD3 data string
+
   }
 
   onMounted(() => {
-    meetOrganiserCode.value = "LVW";
+    // meetOrganiserCode.value = "LVW";
     meetStartDate.value = new Date().toISOString()
                                     .split('T')[0];
 
@@ -138,52 +146,48 @@
 <template>
   <div class="text-sm w-full max-w-4xl">
     <FormKit
-    type="form"
-    :ignore="false"
-    :config="{ validationVisibility: 'dirty' }"
-    @submit="handleSubmit"
-    :actions="false"
-    id="convertForm"
-    form-class="grid grid-cols-12 gap-4 "
+        type="form"
+        :ignore="false"
+        :config="{ validationVisibility: 'dirty' }"
+        @submit="handleSubmit"
+        :actions="false"
+        id="convertForm"
+        form-class="grid grid-cols-12 gap-4 "
     >
-    <template #default="{ state }">
-      <FormKit
-          type="date"
-          label="Meet Date"
-          v-model="meetStartDate"
-          placeholder="Meet date"
-          validation="required|date"
-          name="meet-date"
-          label-class="$reset block mb-1 text-sm font-medium"
-          inner-class="bg-white ring-slate-900/10"
-          outer-class="col-start-1 col-span-full md:col-start-1 md:col-span-6"
-      />
-      <FormKit
-          type="text"
-          label="Meet Name"
-          name="meet-name"
-          v-model="meetName"
-          placeholder="Enter meet name"
-          label-class="$reset block mb-1 text-sm font-medium"
-          validation="required|length:3"
-          inner-class="bg-white ring-slate-900/10"
-          outer-class="col-start-1 col-span-full md:col-start-7 md:col-span-6 "
-      />
-      <FormKit
-          type="select"
-          label="Meet Organiser"
-          name="meet-organiser"
-          v-model="meetOrganiserCode"
-          :options="meetConfig.getAllClubNamesFormSelect()"
-          placeholder="Select Meet Organiser"
-          validation="required"
-          label-class="$reset block mb-1 text-sm font-medium"
-          wrapper-class="$reset max-w-full w-full"
-          inner-class="bg-white ring-slate-900/10"
-          selectIcon-class="$reset formkit-select-icon flex p-[3px] shrink-0 w-5 mr-2 -ml-[1.5em] pointer-events-none formkit-icon"
-          outer-class="col-start-1 col-span-full md:col-start-1 md:col-span-6"
-      />
-<!--      <div class="col-start-1 col-span-full flex gap-4 mb-1">-->
+      <template #default="{ state }">
+        <FormKit
+            type="date"
+            label="Meet Date"
+            v-model="meetStartDate"
+            placeholder="Meet date"
+            validation="required|date"
+            name="meet-date"
+            label-class="font-medium"
+            outer-class="col-start-1 col-span-full md:col-start-1 md:col-span-6"
+        />
+        <FormKit
+            type="text"
+            label="Meet Name"
+            name="meet-name"
+            v-model="meetName"
+            placeholder="Enter meet name"
+            label-class="font-medium"
+            validation="required|length:3"
+            outer-class="col-start-1 col-span-full md:col-start-7 md:col-span-6 "
+        />
+        <FormKit
+            type="select"
+            label="Meet Organiser"
+            name="meet-organiser"
+            v-model="meetOrganiserCode"
+            :options="meetConfig.getAllClubNamesFormSelect()"
+            placeholder="Select Meet Organiser"
+            validation="required"
+            label-class="font-medium"
+            wrapper-class="$reset max-w-full w-full"
+            outer-class="col-start-1 col-span-full md:col-start-1 md:col-span-6"
+        />
+        <!--      <div class="col-start-1 col-span-full flex gap-4 mb-1">-->
         <FormKit
             type="radio"
             v-model="inputDateType"
@@ -200,67 +204,72 @@
             outer-class="col-start-1 col-span-full md:col-start-1 md:col-span-6"
         />
 
-<!--      </div>-->
+        <!--      </div>-->
 
-      <FormKit
-          type="file"
-          v-if="inputDateType==='file'"
-          name="file-upload"
-          label="Upload"
-          accept=".txt,.csv"
-          help="Select an entry file in .csv or .txt format"
-          multiple="false"
-          label-class="$reset block mb-1 text-sm font-medium"
-          wrapper-class="$reset max-w-lg"
-          outer-class="col-start-1 col-span-full md:col-start-1 md:col-span-6"
+        <FormKit
+            type="file"
+            v-if="inputDateType==='file'"
+            name="file-upload"
+            label="Upload"
+            accept=".txt,.csv"
+            help="Select an entry file in .csv or .txt format"
+            multiple="false"
+            label-class="font-medium"
+            wrapper-class=""
+            outer-class="col-start-1 col-span-full md:col-start-1 md:col-span-6"
         />
 
 
-      <FormKit
-          type="textarea"
-          label="CSV Data"
-          v-if="inputDateType==='textarea'"
-          auto-height
-          placeholder="Paste your data here"
-          validation="string|required"
-          name="convert-area"
-          wrapper-class="$reset max-w-full w-full"
-          inner-class="$reset bg-white ring-slate-900/10 min-h-64 formkit-disabled:bg-gray-200 formkit-disabled:cursor-not-allowed formkit-disabled:pointer-events-none flex rounded mb-1 ring-1 ring-gray-400 focus-within:ring-blue-500 [&>label:first-child]:focus-within:text-blue-500 max-w-full w-full"
-          outer-class="col-start-1 col-span-12"
-      />
-
-      <div class="col-start-1 col-span-full flex gap-4 mb-1">
         <FormKit
-            type="button"
-            :disabled="state.loading"
-            @click="clearForm"
-            input-class="$reset form-btn btn-secondary"
-            label="Clear form"
+            type="textarea"
+            label="CSV Data"
+            v-if="inputDateType==='textarea'"
+            auto-height
+            placeholder="Paste your data here"
+            validation="string|required"
+            name="convert-area"
+            wrapper-class=""
+            input-class="min-h-64"
+            inner-class="min-h-64"
+            outer-class="$reset col-start-1 col-span-12"
         />
-        <FormKit
-            type="submit"
-            :disabled="state.loading"
-            @submit="handleSubmit"
-            input-class="$reset form-btn btn-primary"
-        >
-          <template #default>
-            {{ !state.loading ? "Convert" : "Working" }}
-          </template>
-        </FormKit>
+
+        <div class="col-start-1 col-span-full flex justify-normal gap-6 mb-1">
+          <FormKit
+              type="submit"
+              :disabled="state.loading"
+              @submit="handleSubmit"
+
+              outer-class="grow-0"
+          >
+            <template #default>
+              {{ !state.loading ? "Convert" : "Working" }}
+            </template>
+          </FormKit>
 
 
-        <FormKit
-            type="button"
-            :disabled="!submitted"
-            name="download-button"
-            @click="downloadFile"
-            label="Download file"
-            input-class="$reset form-btn btn-secondary"
-        >
-        </FormKit>
+          <FormKit
+              type="button"
+              :disabled="!submitted"
+              name="download-button"
+              @click="downloadFile"
+              label="Download"
+              prefix-icon="download"
+          />
 
-      </div>
-    </template>
+          <div class="flex grow-0 ml-auto">
+            <FormKit
+                type="button"
+                :disabled="state.loading"
+                @click="clearForm"
+                label="Clear form"
+                outer-class="grow-0"
+                label-class="$reset text-xs md:text-medium"
+            />
+          </div>
+
+        </div>
+      </template>
     </FormKit>
   </div>
   <div class="section w-full mt-3">

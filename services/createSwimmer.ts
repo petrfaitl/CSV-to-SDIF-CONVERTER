@@ -81,7 +81,7 @@ export const createSwimmerRecords = (
 const getTeamInformation = (teamCode: string) => {
   const teamRecord = getTeamRecord(teamCode);
   return {
-    teamCode: teamRecord?.teamCode ?? "",
+    teamCode: teamRecord?.teamCode ?? "UNKNOWN",
     teamLSC: teamRecord?.lscCode ?? "UNKNOWN",
     teamName: teamRecord?.teamName ?? "UNKNOWN",
   };

@@ -275,6 +275,10 @@ export const prepareSeedTime = (entryTime: string): string => {
     minutes = minutes.padStart(2, "0");
     seconds = parseFloat(seconds).toFixed(2).padStart(5, "0");
 
+    if(minutes ==="00" && seconds ==="00.00"){
+      return "NT";
+    }
+
     // Return the properly formatted time
     return `${minutes}:${seconds}`;
   } catch (error) {
@@ -331,30 +335,56 @@ export const cleanEntry = (
   return str.replace(regex, "");
 };
 
+// Introduced type alias for clarity
+type ColumnIndex = { key: string; index: number };
 
 /**
- * Filters array of entry data; returns array with indicated columns. These will be mandatory data for further building of sd3 file
- * @param arr List of separated rows of data
- * @param columnIndices Header names and positions
+ * Filters array of entry data and matches indicated columns with their names.
+ * These will be mandatory data for further building of the SD3 file.
+ * @param rows List of separated rows of data.
+ * @param columnMappings Header names and their respective positions in a column.
  */
 export const filterAndNameColumns = (
-  arr: string[][],
-  columnIndices: [{ key: string; index: number }]
-) => {
-  return arr.map((row: string[]) => {
-    const filteredArr = row.filter((_, idx) => {
-      for (const {index} of columnIndices) {
-        if (idx === index) {
-          return true;
-        }
+  rows: string[][],
+  columnMappings: ColumnIndex[]
+): Record<string, string>[] => {
+  // Extracted reusable helper for clarity
+  const mapRowToColumnNames = (row: string[]): Record<string, string> => {
+    return columnMappings.reduce<Record<string, string>>((result, { key, index }) => {
+      if (row[index] !== undefined) {
+        result[key] = row[index];
       }
-    });
-
-    return filteredArr.reduce((accumulator, el, index) => {
-      return {...accumulator, [columnIndices[index]["key"]]: el};
+      return result;
     }, {});
-  });
+  };
+
+  // Simplified the main mapping logic
+  return rows.map(mapRowToColumnNames);
 };
+
+// /**
+//  * Filters array of entry data; returns array with indicated columns. These will be mandatory data for further building of sd3 file
+//  * @param arr List of separated rows of data
+//  * @param columnIndices Header names and positions
+//  */
+// export const filterAndNameColumns = (
+//   arr: string[][],
+//   columnIndices: [{ key: string; index: number }]
+// ) => {
+//   return arr.map((row: string[]) => {
+//     const filteredArr = row.filter((_, idx) => {
+//       for (const {index} of columnIndices) {
+//         if (idx === index) {
+//           return true;
+//         }
+//       }
+//     });
+//
+//     return filteredArr.reduce((accumulator, el, index) => {
+//       return {...accumulator, [columnIndices[index]["key"]]: el};
+//     }, {});
+//   });
+// };
 
 /**
  * Pauses execution for set amount of time in millis; async function must be awaited

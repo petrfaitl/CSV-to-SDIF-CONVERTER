@@ -9,20 +9,12 @@
         @apply text-primary hover:underline;
     }
     button{
-        @apply transition hover:shadow w-[150px] max-w-[250px];
+        @apply transition hover:shadow ;
     }
 }
 @layer components{
 
-    .form-btn{
-        @apply  px-3 py-2 h-10 rounded;
-    }
-    .btn-primary{
-        @apply bg-primary text-white hover:bg-opacity-80;
-    }
-    .btn-secondary {
-        @apply text-primary bg-white  hover:bg-primary hover:bg-opacity-20 disabled:hover:bg-white;
-    }
+
 
 
 }
