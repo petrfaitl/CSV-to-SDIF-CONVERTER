@@ -60,8 +60,8 @@
     "teamName": "WBOP - Te Puke Cluster"
   },
   {
-    "id": "papa",
-    "teamCode": "PAPA",
+    "id": "papc",
+    "teamCode": "PAPC",
     "lscCode": "BP",
     "teamName": "WBOP - Papamoa Cluster"
   },
@@ -70,5 +70,47 @@
     "teamCode": "SCWB",
     "lscCode": "BP",
     "teamName": "WBOP - South Cluster"
+  },
+  {
+    "id": "bthcbp",
+    "teamCode": "BTHC",
+    "lscCode": "BP",
+    "teamName": "Bethlehem College"
+  },
+  {
+    "id": "aquibp",
+    "teamCode": "AQUI",
+    "lscCode": "BP",
+    "teamName": "Aquinas College"
+  },
+  {
+    "id": "papabp",
+    "teamCode": "PAPA",
+    "lscCode": "BP",
+    "teamName": "Papamoa College"
+  },
+  {
+    "id": "whicbp",
+    "teamCode": "WHIC",
+    "lscCode": "BP",
+    "teamName": "Waihi College"
+  },
+  {
+    "id": "katibp",
+    "teamCode": "KATI",
+    "lscCode": "BP",
+    "teamName": "Katikati College"
+  },
+  {
+    "id": "tepubp",
+    "teamCode": "TEPU",
+    "lscCode": "BP",
+    "teamName": "WBOP - Te Puke Cluster"
+  },
+  {
+    "id": "centbp",
+    "teamCode": "CENT",
+    "lscCode": "BP",
+    "teamName": "WBOP - Central Cluster"
   }
 ]
