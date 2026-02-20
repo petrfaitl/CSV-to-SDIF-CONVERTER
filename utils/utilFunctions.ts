@@ -287,7 +287,85 @@ export const prepareSeedTime = (entryTime: string): string => {
   }
 };
 
+/**
+ * Sanitizes and normalizes school year input to a two-digit format.
+ * Handles various input formats: "Y5", "Year 5", "5", "Junior", "Senior", etc.
+ * 
+ * @param {string} schoolYearInput - The raw school year input string.
+ * @returns {SchoolYearResponse} - Object containing normalized schoolYear (2 digits),
+ * validation status, and error message if invalid.
+ */
+export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse {
+  if (typeof schoolYearInput !== 'string') {
+    return {
+      schoolYear: '',
+      isValid: false,
+      validationErrorMessage: 'Invalid input: school year must be a string.',
+    };
+  }
+  
 
+  const normalized = schoolYearInput.toLowerCase().trim();
+
+  // Accept empty string as valid (school year is optional)
+  if (normalized === '') {
+    return {
+      schoolYear: '',
+      isValid: true,
+    };
+  }
+
+  // Handle "Junior" keyword (typically Years 1-4)
+  if (normalized.includes('junior') || normalized.includes('jr')) {
+    return {
+      schoolYear: 'Jr', 
+      isValid: true,
+    };
+  }
+
+  // Handle "Senior" keyword (typically Years 5-8)
+  if (normalized.includes('senior') || normalized.includes('sr')) {
+    return {
+      schoolYear: 'Sr', // Default to Year 8 for Senior
+      isValid: true,
+    };
+  }
+  // Handle "Intermediate" keyword (typically Years 5-8)
+  if (normalized.includes('intermediate') || normalized.includes('int')) {
+    return {
+      schoolYear: 'In', // Default to Intermediate
+      isValid: true,
+    };
+  }
+
+  // Extract numeric value from various formats (Y5, Year 5, year5, etc.)
+  const numericMatch = normalized.match(/\d+/);
+  
+  if (numericMatch) {
+    const yearNum = parseInt(numericMatch[0], 10);
+    
+    // Validate year is in reasonable range (0-13 for NZ school system)
+    if (yearNum >= 0 && yearNum <= 13) {
+      return {
+        schoolYear: yearNum.toString().padStart(2, '0'),
+        isValid: true,
+      };
+    }
+
+    return {
+      schoolYear: '',
+      isValid: false,
+      validationErrorMessage: `Year ${yearNum} is out of valid range (0-13).`,
+    };
+  }
+
+  // If no numeric value found
+  return {
+    schoolYear: '',
+    isValid: false,
+    validationErrorMessage: `Unable to extract year number from "${schoolYearInput}".`,
+  };
+}
 
 /**
  * Splits a string on commas but ignores commas that are preceded or followed by quotes.
@@ -418,4 +496,3 @@ export const getDataRows = (rawData: string) => {
 export const makeFilename = (string: string) => {
   return (string.replace(/[\/|\\:*?"<>' ]/g, "-").toLowerCase()+".sd3");
 }
-

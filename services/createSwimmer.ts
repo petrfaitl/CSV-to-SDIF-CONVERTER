@@ -5,7 +5,8 @@ import {
   getSwimmerAge,
   splitStringOnComma,
   getMMNumber,
-  getTeamRecord
+  getTeamRecord,
+  sanitizeSchoolYear
 } from "~/utils/utilFunctions";
 import { sdifConst } from "~/schemas/eventInfo";
 import {emitD0Record, emitD1Record} from "~/services/emitRecords";
@@ -82,7 +83,7 @@ const getTeamInformation = (teamCode: string) => {
   const teamRecord = getTeamRecord(teamCode);
   return {
     teamCode: teamRecord?.teamCode ?? "UNKNOWN",
-    teamLSC: teamRecord?.lscCode ?? "UNKNOWN",
+    teamLSC: teamRecord?.lscCode ?? "",
     teamName: teamRecord?.teamName ?? "UNKNOWN",
   };
 };
@@ -90,7 +91,7 @@ const getTeamInformation = (teamCode: string) => {
 // Helper Function for Swimmer Age Details
 const getSwimmerAgeDetails = (swimmerRecord: SwimmerRecord): string => {
   return (
-    swimmerRecord.schoolYear ||
+    sanitiseSchoolYear(swimmerRecord.schoolYear) ||
     swimmerRecord.swimmerAge ||
     getSwimmerAge(swimmerRecord.dob)
   );
