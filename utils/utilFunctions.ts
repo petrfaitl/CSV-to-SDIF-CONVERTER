@@ -94,7 +94,6 @@ export const getTeamRecord = (teamStr: string) => {
 };
 
 
-
 export const getFullName = (firstName: string, lastName: string) =>
   lastName + ", " + firstName;
 
@@ -116,7 +115,6 @@ export const getMMNumber = (swimmerRecord: {
     dob,
     middleName = "Z", // Default middle initial to 'Z' if not provided
   } = swimmerRecord;
-
 
 
   // Ensure middleName is a single letter (if provided), or default to "Z"
@@ -275,7 +273,7 @@ export const prepareSeedTime = (entryTime: string): string => {
     minutes = minutes.padStart(2, "0");
     seconds = parseFloat(seconds).toFixed(2).padStart(5, "0");
 
-    if(minutes ==="00" && seconds ==="00.00"){
+    if (minutes === "00" && seconds === "00.00") {
       return "NT";
     }
 
@@ -290,7 +288,7 @@ export const prepareSeedTime = (entryTime: string): string => {
 /**
  * Sanitizes and normalizes school year input to a two-digit format.
  * Handles various input formats: "Y5", "Year 5", "5", "Junior", "Senior", etc.
- * 
+ *
  * @param {string} schoolYearInput - The raw school year input string.
  * @returns {SchoolYearResponse} - Object containing normalized schoolYear (2 digits),
  * validation status, and error message if invalid.
@@ -303,7 +301,7 @@ export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse 
       validationErrorMessage: 'Invalid input: school year must be a string.',
     };
   }
-  
+
 
   const normalized = schoolYearInput.toLowerCase().trim();
 
@@ -315,22 +313,22 @@ export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse 
     };
   }
 
-  // Handle "Junior" keyword (typically Years 1-4)
+  // Handle "Junior" keyword
   if (normalized.includes('junior') || normalized.includes('jr')) {
     return {
-      schoolYear: 'Jr', 
+      schoolYear: 'Jr',
       isValid: true,
     };
   }
 
-  // Handle "Senior" keyword (typically Years 5-8)
+  // Handle "Senior" keyword
   if (normalized.includes('senior') || normalized.includes('sr')) {
     return {
       schoolYear: 'Sr', // Default to Year 8 for Senior
       isValid: true,
     };
   }
-  // Handle "Intermediate" keyword (typically Years 5-8)
+  // Handle "Intermediate" keyword
   if (normalized.includes('intermediate') || normalized.includes('int')) {
     return {
       schoolYear: 'In', // Default to Intermediate
@@ -340,14 +338,24 @@ export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse 
 
   // Extract numeric value from various formats (Y5, Year 5, year5, etc.)
   const numericMatch = normalized.match(/\d+/);
-  
+
   if (numericMatch) {
     const yearNum = parseInt(numericMatch[0], 10);
-    
+
     // Validate year is in reasonable range (0-13 for NZ school system)
-    if (yearNum >= 0 && yearNum <= 13) {
+    if (yearNum >= 0 && yearNum <= 9) {
       return {
-        schoolYear: yearNum.toString().padStart(2, '0'),
+        schoolYear: yearNum.toString().padStart(2, 'Y'),
+        isValid: true,
+      };
+    } else if (yearNum >= 10 && yearNum <= 13) {
+      let yearStr = "Jr"
+      if (yearNum >= 12) {
+        yearStr = "Sr";
+      } else if (yearNum === 11) {yearStr = "In"}
+
+      return {
+        schoolYear: yearStr,
         isValid: true,
       };
     }
@@ -428,7 +436,7 @@ export const filterAndNameColumns = (
 ): Record<string, string>[] => {
   // Extracted reusable helper for clarity
   const mapRowToColumnNames = (row: string[]): Record<string, string> => {
-    return columnMappings.reduce<Record<string, string>>((result, { key, index }) => {
+    return columnMappings.reduce<Record<string, string>>((result, {key, index}) => {
       if (row[index] !== undefined) {
         result[key] = row[index];
       }
@@ -494,5 +502,5 @@ export const getDataRows = (rawData: string) => {
 
 
 export const makeFilename = (string: string) => {
-  return (string.replace(/[\/|\\:*?"<>' ]/g, "-").toLowerCase()+".sd3");
+  return (string.replace(/[\/|\\:*?"<>' ]/g, "-").toLowerCase() + ".sd3");
 }
