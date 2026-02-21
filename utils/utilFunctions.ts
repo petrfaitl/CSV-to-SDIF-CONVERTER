@@ -140,7 +140,8 @@ export const getMMNumber = (swimmerRecord: {
 
   // Get the team information
   const teamRecord = getTeamRecord(teamCode || "undefined");
-  const resolvedTeamCode = teamRecord?.teamCode ?? "UNS";
+  const resolvedTeamCodeRaw = teamRecord?.teamCode ?? "UNS";
+  const resolvedTeamCode = resolvedTeamCodeRaw.substring(0, 3);
 
   try {
     // Generate the MM number using the resolved data
