@@ -362,7 +362,7 @@ export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse 
     };
   }
   // Handle "Intermediate" keyword
-  if (normalised.includes('intermediate') || normalised.includes('int' || normalised.includes('in')) {
+  if (normalised.includes('intermediate') || normalised.includes('int') || normalised.includes('in')) {
     return {
       schoolYear: 'In', // Default to Intermediate
       isValid: true,
