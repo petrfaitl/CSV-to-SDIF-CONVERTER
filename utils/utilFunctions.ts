@@ -347,7 +347,7 @@ export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse 
   }
 
   // Handle "Junior" keyword
-  if (normalised.includes('junior') || normalised.includes('jr')) {
+  if (normalised.includes('junior') || normalised.includes('jr')|| normalised.includes('jn')) {
     return {
       schoolYear: 'Jr',
       isValid: true,
@@ -355,14 +355,14 @@ export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse 
   }
 
   // Handle "Senior" keyword
-  if (normalised.includes('senior') || normalised.includes('sr')) {
+  if (normalised.includes('senior') || normalised.includes('sr')||normalised.includes('sn')) {
     return {
       schoolYear: 'Sr', // Default to Year 8 for Senior
       isValid: true,
     };
   }
   // Handle "Intermediate" keyword
-  if (normalised.includes('intermediate') || normalised.includes('int')) {
+  if (normalised.includes('intermediate') || normalised.includes('int' || normalised.includes('in')) {
     return {
       schoolYear: 'In', // Default to Intermediate
       isValid: true,
