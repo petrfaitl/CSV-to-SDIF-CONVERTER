@@ -223,8 +223,23 @@ export const getDistanceAndStrokeCode = (distanceStroke: string): DistanceAndStr
     };
   }
 
-  const cleanedInput = cleanEntry(distanceStroke).trim();
-  const [distance, stroke] = cleanedInput.split(" ");
+  // Clean input and normalize multiple spaces to single space
+  const cleanedInput = cleanEntry(distanceStroke).trim().replace(/\s+/g, ' ');
+
+  // Find the first space to split distance from stroke
+  const firstSpaceIndex = cleanedInput.indexOf(' ');
+
+  if (firstSpaceIndex === -1) {
+    return {
+      eventDistance: "",
+      eventStrokeCode: null,
+      isValid: false,
+      validationErrorMessage: "Invalid distance format. Expected format: '<distance>m <stroke>'",
+    };
+  }
+
+  const distance = cleanedInput.substring(0, firstSpaceIndex);
+  const stroke = cleanedInput.substring(firstSpaceIndex + 1);
 
   if (!distance || !distance.endsWith("m") || distance.startsWith("m") || !stroke) {
     return {
@@ -321,10 +336,10 @@ export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse 
   }
 
 
-  const normalized = schoolYearInput.toLowerCase().trim();
+  const normalised = schoolYearInput.toLowerCase().trim();
 
   // Accept empty string as valid (school year is optional)
-  if (normalized === '') {
+  if (normalised === '') {
     return {
       schoolYear: '',
       isValid: true,
@@ -332,7 +347,7 @@ export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse 
   }
 
   // Handle "Junior" keyword
-  if (normalized.includes('junior') || normalized.includes('jr')) {
+  if (normalised.includes('junior') || normalised.includes('jr')) {
     return {
       schoolYear: 'Jr',
       isValid: true,
@@ -340,14 +355,14 @@ export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse 
   }
 
   // Handle "Senior" keyword
-  if (normalized.includes('senior') || normalized.includes('sr')) {
+  if (normalised.includes('senior') || normalised.includes('sr')) {
     return {
       schoolYear: 'Sr', // Default to Year 8 for Senior
       isValid: true,
     };
   }
   // Handle "Intermediate" keyword
-  if (normalized.includes('intermediate') || normalized.includes('int')) {
+  if (normalised.includes('intermediate') || normalised.includes('int')) {
     return {
       schoolYear: 'In', // Default to Intermediate
       isValid: true,
@@ -355,7 +370,7 @@ export function sanitiseSchoolYear(schoolYearInput: string): SchoolYearResponse 
   }
 
   // Extract numeric value from various formats (Y5, Year 5, year5, etc.)
-  const numericMatch = normalized.match(/\d+/);
+  const numericMatch = normalised.match(/\d+/);
 
   if (numericMatch) {
     const yearNum = parseInt(numericMatch[0], 10);

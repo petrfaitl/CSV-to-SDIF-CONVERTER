@@ -16,30 +16,30 @@ import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/outline";
 
 const navItems = [
   {
-    id: 0,
+    id: 1,
     title: "Swim Club",
     link: "https://www.lvwasc.co.nz",
     type: "external",
   },
   {
-    id: 1,
+    id: 2,
     title: "Meet Manager Help",
     link: "https://activenetwork.my.salesforce-sites.com/hytekswimming/",
     type: "external",
   },
   {
-    id: 1,
+    id: 3,
     title: "SDIF Specifications",
     link: "/files/sdifv3f.txt",
     type: "external",
   },
   {
-    id: 2,
+    id: 0,
     title: "Manage Teams",
     link: "/teams",
   },
   {
-    id: 3,
+    id: 4,
     title: "Contact Us",
     link: "https://www.lvwasc.co.nz/contact/",
     type: "external",

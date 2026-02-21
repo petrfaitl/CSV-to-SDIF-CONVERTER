@@ -2,6 +2,7 @@
   "free": 1,
   "freestyle": 1,
   "free style": 1,
+  "freesytyle": 1,
   "back": 2,
   "backstroke": 2,
   "back stroke": 2,
@@ -12,5 +13,6 @@
   "butterfly": 4,
   "im": 5,
   "individual medley": 5,
+  "individual": 5,
   "medley": 5
 }
