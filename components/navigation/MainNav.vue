@@ -34,7 +34,12 @@ const navItems = [
     type: "external",
   },
   {
-    id: 1,
+    id: 2,
+    title: "Manage Teams",
+    link: "/teams",
+  },
+  {
+    id: 3,
     title: "Contact Us",
     link: "https://www.lvwasc.co.nz/contact/",
     type: "external",

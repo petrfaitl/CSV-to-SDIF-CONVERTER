@@ -1,6 +1,20 @@
 import strokes from '@/schemas/swimming_stroke_codes.json';
 import teamCodes from '@/schemas/swimming_team_directory.json';
 
+const getStoredTeams = () => {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('custom_swimming_teams');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        return [];
+      }
+    }
+  }
+  return [];
+};
+
 
 export const toFixedLength = function (
   value: string,
@@ -86,10 +100,14 @@ export const getTeamRecord = (teamStr: string) => {
   // Normalize the input team identifier
   const normalizedTeam = teamStr.toLowerCase().trim();
 
+  const customTeams = getStoredTeams();
+  const allTeams = [...teamCodes, ...customTeams];
+
   // Search for the team record or fall back to the default undefined record
   return (
-    teamCodes.find(t => t.id === normalizedTeam) ||
-    teamCodes.find(t => t.id === "undefined")
+    allTeams.find(t => t.id === normalizedTeam) ||
+    allTeams.find(t => t.teamCode.toLowerCase() === normalizedTeam) ||
+    allTeams.find(t => t.id === "undefined")
   );
 };
 

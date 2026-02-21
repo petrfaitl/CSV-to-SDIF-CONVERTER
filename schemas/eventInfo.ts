@@ -37,7 +37,39 @@ export const meetConfig = {
   },
 
   getAllClubNamesFormSelect() {
-    return this.organiserInfo.map((organiser) => ({
+    const getStoredTeams = () => {
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('custom_swimming_teams');
+        if (stored) {
+          try {
+            return JSON.parse(stored);
+          } catch (e) {
+            return [];
+          }
+        }
+      }
+      return [];
+    };
+
+    const customTeams = getStoredTeams();
+    const allOrganisers = [...this.organiserInfo];
+
+    // Add custom teams as organisers if they are not already there
+    customTeams.forEach((team: any) => {
+      if (!allOrganisers.find(o => o.orgCode === team.teamCode)) {
+        allOrganisers.push({
+          orgCode: team.teamCode,
+          lscCode: team.lscCode,
+          orgName: team.teamName,
+          orgAddress: "",
+          orgCity: "",
+          orgPostcode: "",
+          orgState: team.lscCode
+        });
+      }
+    });
+
+    return allOrganisers.map((organiser) => ({
       label: organiser.orgName,
       value: organiser.orgCode,
     }));

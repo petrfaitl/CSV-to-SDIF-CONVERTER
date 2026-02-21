@@ -112,5 +112,29 @@
     "teamCode": "CENT",
     "lscCode": "BP",
     "teamName": "WBOP - Central Cluster"
+  },
+  {
+    "id": "mauabp",
+    "teamCode": "MAUAO",
+    "lscCode": "BP",
+    "teamName": "Mauao"
+  },
+  {
+    "id": "teawabp",
+    "teamCode": "TEAWA",
+    "lscCode": "BP",
+    "teamName": "Te Awanui"
+  },
+  {
+    "id": "wairobp",
+    "teamCode": "WAIRO",
+    "lscCode": "BP",
+    "teamName": "Wairoa"
+  },
+  {
+    "id": "tarawbp",
+    "teamCode": "TARAW",
+    "lscCode": "BP",
+    "teamName": "Tarawera"
   }
 ]
